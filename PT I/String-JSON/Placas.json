@@ -1,0 +1,28 @@
+{
+    "Automoviles":[
+
+        {
+            "Placa" : "CVL 657 18",
+            "Modelo" : "Cruze",
+            "Color": "Rojo"
+        },
+        {
+            "Placa" : "MRE-99-88",
+            "Modelo" : "Jetta",
+            "Color":  "Negro"
+        },
+        {
+            "Placa" : "D02-BCP",
+            "Modelo" : "Versa",
+            "Color": "Rojo"
+        },
+        {
+            "Placa" : "MLA-50-43",
+            "Modelo" : "Golf",
+            "Color":  "Gris"
+        }
+
+    ]
+
+
+}
