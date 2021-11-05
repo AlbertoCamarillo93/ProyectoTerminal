@@ -1,0 +1,6 @@
+{
+    "Placa": "LL9-667",
+    "Marca": "Audi",
+    "Modelo": "A5",
+    "Color": "Cafe"
+}

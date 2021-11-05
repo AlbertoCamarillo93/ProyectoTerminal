@@ -1,0 +1,50 @@
+{
+    "Automoviles":[
+
+        {
+            "Placa"  : "D50-BAC",
+            "Marca"  : "Volkswagen",
+            "Modelo" : "Jetta",
+            "Color"  : "Blanco"
+        },
+        {
+            "Placa"  : "MRE-99-88",
+            "Marca"  : "Volkswagen",
+            "Modelo" : "Jetta",
+            "Color"  : "Negro"
+        },
+        {
+            "Placa"  : "D02-BCP",
+            "Marca"  : "Nissan",
+            "Modelo" : "Versa",
+            "Color"  : "Rojo"
+        },
+        {
+            "Placa"  : "NYA-69-79",
+            "Marca"  : "KIA",
+            "Modelo" : "Forte",
+            "Color"  : "Rojo"
+        },
+        {
+            "Placa"  : "NHH-48-96",
+            "Marca"  : "Seat",
+            "Modelo" : "Ibiza",
+            "Color"  : "Gris"
+        },
+        {
+            "Placa"  : "NTJ-55-79",
+            "Marca"  : "Volkswagen",
+            "Modelo" : "Vento",
+            "Color"  : "Dorado"
+        },
+        {
+            "Placa"  : "NDM-56-77",
+            "Marca"  : "Nissan",
+            "Modelo" : "Versa",
+            "Color"  : "Gris"
+        }
+   ,{"Placa": "A33-ASD", "Marca": "Chevrolet", "Modelo": "Aveo", "Color": "Gris"}
+,{"Placa": "ASD-99-77", "Marca": "CUPRA", "Modelo": "Formentor", "Color": "Azul"}
+,{"Placa": "GHI-999", "Marca": "Mercedes Benz", "Modelo": "GLA", "Color": "Morado"}
+]
+}

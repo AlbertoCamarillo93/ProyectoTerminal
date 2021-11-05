@@ -1,0 +1,6 @@
+{
+    "Placa": "QWE-33-02",
+    "Marca": "Honda",
+    "Modelo": "City",
+    "Color": "Cafe"
+}

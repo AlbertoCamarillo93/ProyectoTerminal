@@ -1,0 +1,6 @@
+{
+    "Placa": "AAE-66-99",
+    "Marca": "Cadillac",
+    "Modelo": "XT4",
+    "Color": "Negro"
+}
