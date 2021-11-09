@@ -213,9 +213,16 @@ class GestionarUsuarioElimina():
         self.c1 = self.db.cursor()
         self.valor = self.comboEliminar.get()
         self.c1.execute("DELETE FROM Usuario WHERE correo = ?", (self.valor,))                 
-        self.db.commit()
-
+        
+        n = 0
+        for row in self.result:
+            if self.comboEliminar.get() == row:
+                del self.result[n]
+            n+= 1
+        self.comboEliminar ["values"]= self.result
         self.comboEliminar.set("Elige una opción")
+
+        self.db.commit()
         
         messagebox.showinfo("Eliminar Usuario","Registro borrado con éxito") 
         
@@ -266,7 +273,7 @@ class GestionarUsuarioCrear:
         self.boxLastname.place(x=105, y=75,  width=180, height=25)
 
         Label(self.windowSubmenuGUCrearCuenta, text = "Contraseña" ).place(x=5, y=105)
-        self.boxPassword = Entry(self.windowSubmenuGUCrearCuenta)
+        self.boxPassword = Entry(self.windowSubmenuGUCrearCuenta,  show = "*")
         self.boxPassword.place(x=105, y=105,  width=180, height=25)
         
         Label(self.windowSubmenuGUCrearCuenta, text = "Correo:").place(x=5, y=135)
@@ -296,6 +303,13 @@ class GestionarUsuarioCrear:
         
         if self.boxName.get() == "" or self.boxLastname.get() == "" or self.boxPassword.get() == "" or self.boxEmail.get() == "" or self.comboTipoUsuario.get() == "Elige una opción" or self.comboAsignarCamara.get() == "Elige una opción":
             return messagebox.showwarning("Crear Usuario","Error, ningun campo puede quedar vacio")
+        elif len(self.boxPassword.get()) < 4:
+            return messagebox.showwarning("Crear Usuario","Error, la contraseña debe tener al menos 4 digitos")
+        elif self.boxEmail.get().find('@') == -1:
+            return messagebox.showwarning("Crear Usuario","Error, no es un correo valido")
+        elif self.boxEmail.get().find('.com') == -1:
+            return messagebox.showwarning("Crear Usuario","Error, no es un correo valido")
+        
 
         self.c = self.db.cursor()
 
@@ -376,9 +390,9 @@ class GestionarUsuarioModificar:
         self.boxLastname = Entry(self.windowSubmenuGUModificarCuenta, textvariable = self.boxLastname_var)
         self.boxLastname.place(x=120, y=105,  width=180, height=25)
 
-        Label(self.windowSubmenuGUModificarCuenta, text = "Contraseña" ).place(x=5, y=135)
+        Label(self.windowSubmenuGUModificarCuenta, text = "Contraseña").place(x=5, y=135)
         self.boxPassword_var = StringVar()
-        self.boxPassword = Entry(self.windowSubmenuGUModificarCuenta, textvariable = self.boxPassword_var)
+        self.boxPassword = Entry(self.windowSubmenuGUModificarCuenta, textvariable = self.boxPassword_var, show = "*")
         self.boxPassword.place(x=120, y=135,  width=180, height=25)
         
         Label(self.windowSubmenuGUModificarCuenta, text = "Correo:").place(x=5, y=165)
@@ -407,6 +421,12 @@ class GestionarUsuarioModificar:
     def modificarUsuario(self):
         if self.boxName.get() == "" or self.boxLastname.get() == "" or self.boxPassword.get() == "" or self.boxEmail.get() == "" or self.comboTipoUsuario.get() == "Elige una opción" or self.comboCamara.get() == "Elige una opción":
             return messagebox.showwarning("Modificar Usuario","Error, ningun campo puede quedar vacio")
+        elif len(self.boxPassword.get()) < 4:
+            return messagebox.showwarning("Modificar Usuario","Error, la contraseña debe tener al menos 4 digitos")
+        elif self.boxEmail.get().find('@') == -1:
+            return messagebox.showwarning("Modificar Usuario","Error, no es un correo valido")
+        elif self.boxEmail.get().find('.com') == -1:
+            return messagebox.showwarning("Modificar Usuario","Error, no es un correo valido")
 
         self.c.execute("SELECT * FROM Usuario WHERE correo = ?", (self.valor,))
         elUsuario=self.c.fetchall()
