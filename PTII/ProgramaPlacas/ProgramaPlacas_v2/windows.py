@@ -301,6 +301,7 @@ class GestionarUsuarioCrear:
     #CREAR MENSAJES DE ERROR Y EXITO SEGUN SEA EL CASO
     def crearUsuario(self):
         
+        #Condiciones que no debe haber para poder crear un usuario
         if self.boxName.get() == "" or self.boxLastname.get() == "" or self.boxPassword.get() == "" or self.boxEmail.get() == "" or self.comboTipoUsuario.get() == "Elige una opción" or self.comboAsignarCamara.get() == "Elige una opción":
             return messagebox.showwarning("Crear Usuario","Error, ningun campo puede quedar vacio")
         elif len(self.boxPassword.get()) < 4:
@@ -310,14 +311,37 @@ class GestionarUsuarioCrear:
         elif self.boxEmail.get().find('.com') == -1:
             return messagebox.showwarning("Crear Usuario","Error, no es un correo valido")
         
-
+        #Crea conexión a la BD y realiza consulta de todos los correos de los usuarios
+        self.c4 = self.db.cursor()
+        self.c4.execute("SELECT correo FROM Usuario") 
+        
+        #Crea una lista y luego  almacena en ella el valor del email dado por el usuario
+        self.listaCorreoSeleccionado = []
+        self.listaCorreoSeleccionado.append(self.boxEmail.get())
+       
+        #Crea una lista y luego  almacena en ella el valor de todos los correos de la BD
+        self.listaCorreos = []
+        for row in self.c4.fetchall():
+            self.listaCorreos.append(row[0])
+        
+        n=0
+        #Ciclo para verificar si el correo esta dentro o no de la BD
+        for i in self.listaCorreos:
+            n+=1
+            if  self.listaCorreoSeleccionado[0] not in self.listaCorreos   :
+                self.listaCorreos.append(self.listaCorreoSeleccionado[0])
+                break  
+            elif self.listaCorreos[n] == self.listaCorreoSeleccionado[0]:
+                return messagebox.showwarning("Crear Usuario","Error, el correo ya existe")
+            
+        #Crea conexión a la BD y realiza un insert con los valores dados por el usuario
         self.c = self.db.cursor()
-
-        self.datos = self.comboAsignarCamara.get(), self.boxName.get(),self.boxLastname.get(),self.boxPassword.get(),self.boxEmail.get(),self.comboTipoUsuario.get()
+        self.datos = self.comboAsignarCamara.get(), self.boxName.get().capitalize(),self.boxLastname.get().capitalize(),self.boxPassword.get(),self.boxEmail.get(),self.comboTipoUsuario.get()
         self.c.execute("INSERT INTO Usuario VALUES(NULL,?,?,?,?,?,?)", (self.datos))  
             
         self.db.commit()
 
+        #Limpia widgets de la ventana
         self.boxName.delete(0, 'end')
         self.boxLastname.delete(0, 'end')
         self.boxPassword.delete(0, 'end')
