@@ -67,7 +67,7 @@ class GestionarUsuarioModificar:
         
         Label(self.windowSubmenuGUModificarCuenta, text = "Correo:").place(x=5, y=165)
         self.boxEmail_var = StringVar()
-        self.boxEmail = Entry(self.windowSubmenuGUModificarCuenta, textvariable = self.boxEmail_var)
+        self.boxEmail = Entry(self.windowSubmenuGUModificarCuenta, state = "readonly", textvariable = self.boxEmail_var)
         self.boxEmail.place(x=120, y=165, width=180, height=25)
 
         Label(self.windowSubmenuGUModificarCuenta, text = "Tipo usuario:").place(x=5, y=195)
@@ -99,42 +99,9 @@ class GestionarUsuarioModificar:
             return messagebox.showwarning("Modificar Usuario","Error, no es un correo valido")
         elif self.boxEmail.get().find('.com') == -1:
             return messagebox.showwarning("Modificar Usuario","Error, no es un correo valido")
-
-
-        ##CAMBIO AQUI
-        #Crea conexión a la BD y realiza consulta de todos los correos de los usuarios
-        """self.c4 = self.db.cursor()
-        self.c4.execute("SELECT correo FROM Usuario") 
-        
-        #Crea una lista y luego  almacena en ella el valor del email dado por el usuario
-        self.listaCorreoSeleccionado = []
-        self.listaCorreoSeleccionado.append(self.boxEmail.get())
-       
-        #Crea una lista y luego  almacena en ella el valor de todos los correos de la BD
-        self.listaCorreos = []
-        for row in self.c4.fetchall():
-            self.listaCorreos.append(row[0])
-        
-        n=0
-        #Ciclo para verificar si el correo esta dentro o no de la BD
-        for i in self.listaCorreos:
-            n+=1
-            if  self.listaCorreoSeleccionado[0] not in self.listaCorreos   :
-                self.listaCorreos.append(self.listaCorreoSeleccionado[0])
-                break  
-            elif self.listaCorreos[n] == self.listaCorreoSeleccionado[0]:
-                return messagebox.showwarning("Crear Usuario","Error, el correo ya existe")"""
-        ##CAMBIO AQUI#####
-
-        """self.c.execute("SELECT * FROM Usuario WHERE correo = ?", (self.valor,))
-        elUsuario=self.c.fetchall()
-        
-        for usuario in elUsuario:
-            self.idUsuario_var.set(usuario[0])"""
         
         self.datos = self.comboCamara.get(), self.boxName.get(), self.boxLastname.get(), self.boxPassword.get(), self.boxEmail.get(), self.comboTipoUsuario.get(), self.idUsuario_var.get()
-        self.c.execute("UPDATE Usuario SET  id_camara = ?, nombre = ?, apellido_p = ?, password = ?, correo = ?, tipoUsuario = ? WHERE idUsuario = ?", (self.datos))  
-        
+        self.c.execute("UPDATE Usuario SET  id_camara = ?, nombre = ?, apellido_p = ?, password = ?, correo = ?, tipoUsuario = ? WHERE idUsuario = ?", (self.datos))        
 
         self.comboUser.set("Elige una opción")
         self.boxName.delete(0, 'end')

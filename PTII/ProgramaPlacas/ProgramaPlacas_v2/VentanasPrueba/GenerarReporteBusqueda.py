@@ -33,25 +33,35 @@ class GenerarReporteBusqueda:
         self.windowSubmenuRPGenerarReporte.title("Reporte de Placas/Generar Reporte")
         Label(self.windowSubmenuRPGenerarReporte, text = "Generar Reporte" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
+
+        ####CAMBIO --> radiobutton
+        #RADIOBUTTON
+        self.opcion = IntVar()
+        self.buttonCDMX = Radiobutton(self.windowSubmenuRPGenerarReporte, text="Ciudad de México", variable= self.opcion, value=1, command= self.selec)
+        self.buttonCDMX.place(x=5, y=200)
+        self.buttonEdoMex = Radiobutton(self.windowSubmenuRPGenerarReporte, text="Estado de México", variable= self.opcion, value=2, command= self.selec)
+        self.buttonEdoMex.place(x=5, y=230)
+        ####CAMBIO
+
         #COLUMNA DE LABES, BOXES
         Label(self.windowSubmenuRPGenerarReporte, text = "Placa:" ).place(x=5, y=45)
         self.boxPlate_var = StringVar()
         self.boxPlate = Entry(self.windowSubmenuRPGenerarReporte, textvariable = self.boxPlate_var)
         self.boxPlate.place(x=105, y=45, width=180, height=25)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Marca" ).place(x=5, y=75)
+        Label(self.windowSubmenuRPGenerarReporte, text = "Marca:" ).place(x=5, y=75)
         self.comboMarca = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values = self.resultMarca)
         self.comboMarca.set("Marca")
         self.comboMarca.place(x=105, y=75, width=180, height=25)
         self.buttonBuscarModelo = Button(self.windowSubmenuRPGenerarReporte, text = "Buscar Modelo", command = self.obtenerModelo)
         self.buttonBuscarModelo.place(x=120, y=105, width=140, height=30)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Modelo" ).place(x=5, y=145)
+        Label(self.windowSubmenuRPGenerarReporte, text = "Modelo:" ).place(x=5, y=145)
         self.comboModelo = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values =  self.listaModelo) 
         self.comboModelo.set("Modelo")
         self.comboModelo.place(x=105, y=145, width=180, height=25)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Color" ).place(x=5, y=175)
+        Label(self.windowSubmenuRPGenerarReporte, text = "Color:" ).place(x=5, y=175)
         self.comboColor = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values =  self.listaColores) 
         self.comboColor.set("Color")
         self.comboColor.place(x=105, y=175, width=180, height=25)
@@ -59,21 +69,46 @@ class GenerarReporteBusqueda:
         #COLUMNA DE BOTONES
         self.buttonAceptar = Button(self.windowSubmenuRPGenerarReporte, text = "Aceptar", command = self.generarReporteBusqueda)
         self.buttonAceptar.place(x=105, y=220,  width=80, height=30)
-        #self.buttonRegresar = Button(self.windowSubmenuRPGenerarReporte, text = "Regresar", command = lambda : ReportePlacas(self.windowSubmenuRPGenerarReporte.withdraw()))
-        #self.buttonRegresar.place(x=200, y=220, width=80, height=30)
+        self.buttonRegresar = Button(self.windowSubmenuRPGenerarReporte, text = "Regresar")#, command = lambda : ReportePlacas(self.windowSubmenuRPGenerarReporte.withdraw()))
+        self.buttonRegresar.place(x=200, y=220, width=80, height=30)
 
         self.windowSubmenuRPGenerarReporte.mainloop()
 
     def generarReporteBusqueda(self):
 
-        if self.boxPlate.get() == "" or len(self.boxPlate.get()) > 9 or len(self.boxPlate.get()) < 7:
-            if self.boxPlate.get() == "":
-                return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
-            elif len(self.boxPlate.get()) > 9:
-                return messagebox.showerror("Genear Reporte","Error, campo Placa excede caracteres permitidos")
-            else:
-                return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
-        elif self.comboMarca.get() == "Marca":
+        #if self.boxPlate.get() == "" or len(self.boxPlate.get()) > 9 or len(self.boxPlate.get()) < 7:
+        ####CAMBIO --> Reorganización
+        if self.boxPlate.get() == "":
+            return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
+        elif len(self.boxPlate.get()) > 9:
+            return messagebox.showerror("Genear Reporte","Error, campo Placa excede caracteres permitidos")
+        elif len(self.boxPlate.get()) < 7:
+            return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
+        
+        #Placa CDMX
+        if self.opcion.get() == 1:
+            len(self.boxPlate.get()) == 7
+            for indice in range(len(self.boxPlate.get())):
+                caracter = '-'
+                if caracter != self.boxPlate.get()[3]:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la cuarta posición")
+        
+        #Placa EdoMex
+        n = 0
+        if self.opcion.get() == 2:
+            len(self.boxPlate.get()) == 9
+            for indice in range(len(self.boxPlate.get())):
+                caracter = '-'
+                if caracter != self.boxPlate.get()[3] or caracter != self.boxPlate.get()[6]:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la cuarta y séptima posición")
+                for i in self.listaAbecedario:
+                    if self.listaAbecedario[n] != self.boxPlate.get()[0] or self.listaAbecedario[n] != self.boxPlate.get()[1] or self.listaAbecedario[n] != self.boxPlate.get()[2]:
+                        return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letras en las primeras tres posiciones")
+                    n+=1
+        
+        ####CAMBIO
+
+        if self.comboMarca.get() == "Marca": ####CAMBIO elif --> if
             return messagebox.showerror("Genear Reporte","Error, selecciona una marca")
         elif self.comboModelo.get() == "Modelo":
             return messagebox.showerror("Genear Reporte","Error, selecciona un modelo")
@@ -132,6 +167,19 @@ class GenerarReporteBusqueda:
         self.db.commit
         self.comboModelo ["values"]= self.listaModelo
         self.comboModelo.set("Modelo")
+
+    ####CAMBIO --> funcion nueva
+    def selec(self):
+        if self.opcion.get() == 1:
+            print("CDMX")
+            self.boxPlate_var.set("A00-AAA / 000-AAA")
+        else:
+            print("EDOMEX")
+            self.boxPlate_var.set("AAA-00-00")
+
+        self.listaAbecedario = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        self.listaNumeros = [0,1,2,3,4,5,6,7,8,9]
+    ####CAMBIO
 
 args = ""
 GenerarReporteBusqueda(args)

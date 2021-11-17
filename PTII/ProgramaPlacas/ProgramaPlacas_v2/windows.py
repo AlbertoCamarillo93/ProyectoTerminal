@@ -34,6 +34,7 @@ class Login:
         self.boxPassword = Entry(self.windowLogin, show = "*")
         self.boxPassword.pack()
 
+        #Bloque de botones
         self.buttonLogin = Button (self.windowLogin, text = "Login", command = self.login).pack()
         self.buttonExit = Button (self.windowLogin, text = "Salir", command = self.exit).pack()
 
@@ -46,9 +47,11 @@ class Login:
         self.db = sqlite3.connect('proyecto_placas.db')
         self.c = self.db.cursor()
         
-        self.c.execute("SELECT * FROM Usuario WHERE correo=? AND password=?", (self.boxEmail.get(), self.boxPassword.get()))
-        
+        #Query que selecciona al usuario y correo ingresado de la BD
+        self.c.execute("SELECT * FROM Usuario WHERE correo=? AND password=?", (self.boxEmail.get(), self.boxPassword.get()))        
         row = self.c.fetchall() 
+        
+        #Condicional que verifica tipo de usuario para enviarlo al menú correspondiente
         if row:
             if row[0][6] == 'Administrador':
                 Administrador(self)
@@ -60,12 +63,13 @@ class Login:
             tkinter.messagebox.showerror(title = "Login incorrecto", message = "Usuario o contraseña incorrecta")
     
         self.c.close()
-        #print(row)
+
+    #Cierra la ventana
+    def exit(self):
+        self.windowLogin.destroy()
 
     def prueba(self):
         self.boxEmail.get()
-    def exit(self):
-        self.windowLogin.destroy()
 
 
 ######################################################################################################################################################        
@@ -122,10 +126,7 @@ class User():
         Label(self.windowMenuUser, text = "Datos Contacto" ).place(x=5, y=135)
 
         #COLUMNA DE BOTONES
-        #CREAR CONDICION EN OBTENER REPORTE PARA QUE CUANDO VENGA DESDE EL MENU DE USUARIO NO ME MEZCLE CON EL MENU DE ADMINISTRADOR
-        #LLAMA CLASE ObtenerReporteAlerta, pero esta también es llamada por el Admin, realizar lógica para que tanto admin como user 
-        #puedan entrar y no haya conflicto de ventanas
-        self.buttonReporteAlerta = Button(self.windowMenuUser, text = "Obtener Reporte de Alertas", command = lambda : ObtenerReporteAlertaUsuario(self.windowMenuUser.withdraw()))  #, command = obtenerReporte
+        self.buttonReporteAlerta = Button(self.windowMenuUser, text = "Obtener Reporte de Alertas", command = lambda : ObtenerReporteAlertaUsuario(self.windowMenuUser.withdraw()))
         self.buttonReporteAlerta.place(x=200, y=45, width=180, height=30) 
 
         self.buttonMonitorearCamara = Button(self.windowMenuUser, text = "Monitorear Cámara", command = lambda : MonitoreaCamara(self.windowMenuUser.withdraw()))
@@ -178,18 +179,22 @@ class GestionarUsuario():
 class GestionarUsuarioElimina():
 
     def __init__(self, args):
-
+        #Conecta a la BD
         self.db = sqlite3.connect('proyecto_placas.db')  
         self.c = self.db.cursor()
+        self.c1 = self.db.cursor()
+
+        #Consulta los correos de la BD y los ordena
         self.c.execute("SELECT correo FROM Usuario ORDER BY correo ASC ")   
 
+        #Se crea lista y se recorre agregando los datos obtenidos en el query
         self.result = []
-
         for row in self.c.fetchall():
             self.result.append(row[0])
 
+        #Valores primarios de la ventana
         self.windowSubmenuGUEliminarCuenta = Tk()
-        self.windowSubmenuGUEliminarCuenta.geometry("350x300+500+250")
+        self.windowSubmenuGUEliminarCuenta.geometry("350x200+500+250")
         self.windowSubmenuGUEliminarCuenta.title("Gestión Usuarios/Eliminar Cuenta")
         Label(self.windowSubmenuGUEliminarCuenta, text = "Eliminar Cuenta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
@@ -207,13 +212,14 @@ class GestionarUsuarioElimina():
         self.buttonRegresar.place(x=190, y=95, width=80, height=30)
 
     def eliminarCuenta(self):
+        #Condicional que verifica que se haya seleccionado un usuario
         if self.comboEliminar.get() == "Elige una opción":
                 return messagebox.showwarning("Eliminar Usuario","Error, selecciona un usuario")
 
-        self.c1 = self.db.cursor()
-        self.valor = self.comboEliminar.get()
-        self.c1.execute("DELETE FROM Usuario WHERE correo = ?", (self.valor,))                 
+        #Query que eliminar el usuario seleccionado por el usuario
+        self.c1.execute("DELETE FROM Usuario WHERE correo = ?", (self.comboEliminar.get(),))                 
         
+        #Bloque que elimina del combobox la opción eliminada por el usuario y limpia el combobox
         n = 0
         for row in self.result:
             if self.comboEliminar.get() == row:
@@ -223,7 +229,6 @@ class GestionarUsuarioElimina():
         self.comboEliminar.set("Elige una opción")
 
         self.db.commit()
-        
         messagebox.showinfo("Eliminar Usuario","Registro borrado con éxito") 
         
 
@@ -361,6 +366,7 @@ class GestionarUsuarioModificar:
     ################ ADMINISTRADOR – GESTIÓN DE USUARIO – MODIFICAR CUENTA ###############
     def __init__(self, args):
 
+        #Conexiones a BD
         self.db = sqlite3.connect('proyecto_placas.db')  
         self.c = self.db.cursor()
         self.c1 = self.db.cursor()
@@ -389,6 +395,7 @@ class GestionarUsuarioModificar:
         for row in self.c2.fetchall():
             self.resultTipoUser.append(row[0])
 
+        #Definiendo valores primarios de la ventana
         self.windowSubmenuGUModificarCuenta = Toplevel()
         self.windowSubmenuGUModificarCuenta.geometry("350x350+500+250")
         self.windowSubmenuGUModificarCuenta.title("Gestión Usuarios/Modificar Cuenta")
@@ -421,7 +428,7 @@ class GestionarUsuarioModificar:
         
         Label(self.windowSubmenuGUModificarCuenta, text = "Correo:").place(x=5, y=165)
         self.boxEmail_var = StringVar()
-        self.boxEmail = Entry(self.windowSubmenuGUModificarCuenta, textvariable = self.boxEmail_var)
+        self.boxEmail = Entry(self.windowSubmenuGUModificarCuenta, state = "readonly", textvariable = self.boxEmail_var)
         self.boxEmail.place(x=120, y=165, width=180, height=25)
 
         Label(self.windowSubmenuGUModificarCuenta, text = "Tipo usuario:").place(x=5, y=195)
@@ -443,6 +450,7 @@ class GestionarUsuarioModificar:
         self.idUsuario_var = IntVar()
 
     def modificarUsuario(self):
+        #Verifica que no esten en blanco los widgets Entry, así como en el email, se este registrando uno valido
         if self.boxName.get() == "" or self.boxLastname.get() == "" or self.boxPassword.get() == "" or self.boxEmail.get() == "" or self.comboTipoUsuario.get() == "Elige una opción" or self.comboCamara.get() == "Elige una opción":
             return messagebox.showwarning("Modificar Usuario","Error, ningun campo puede quedar vacio")
         elif len(self.boxPassword.get()) < 4:
@@ -451,17 +459,12 @@ class GestionarUsuarioModificar:
             return messagebox.showwarning("Modificar Usuario","Error, no es un correo valido")
         elif self.boxEmail.get().find('.com') == -1:
             return messagebox.showwarning("Modificar Usuario","Error, no es un correo valido")
-
-        self.c.execute("SELECT * FROM Usuario WHERE correo = ?", (self.valor,))
-        elUsuario=self.c.fetchall()
-        
-        for usuario in elUsuario:
-            self.idUsuario_var.set(usuario[0])
-        
+       
+        #Realiza el update con los datos dentro de los Entry
         self.datos = self.comboCamara.get(), self.boxName.get(), self.boxLastname.get(), self.boxPassword.get(), self.boxEmail.get(), self.comboTipoUsuario.get(), self.idUsuario_var.get()
         self.c.execute("UPDATE Usuario SET  id_camara = ?, nombre = ?, apellido_p = ?, password = ?, correo = ?, tipoUsuario = ? WHERE idUsuario = ?", (self.datos))  
-        self.db.commit()
-
+        
+        #Limpia los campos al finalizar la transacción
         self.comboUser.set("Elige una opción")
         self.boxName.delete(0, 'end')
         self.boxLastname.delete(0, 'end')
@@ -469,19 +472,30 @@ class GestionarUsuarioModificar:
         self.boxEmail.delete(0, 'end')
         self.comboTipoUsuario.set("Elige una opción")
         self.comboCamara.set("Elige una opción")
-    
+
+        #Limpia el combobox para seleccionar el correo del usuario a modificar
+        n = 0
+        for row in self.result:
+            if self.comboUser.get() == row:
+                del self.result[n]
+            n+= 1
+        self.comboUser ["values"]= self.result
+        self.comboUser.set("Elige una opción")
+
+        self.db.commit()
         messagebox.showinfo("Modificar Usuario","Registro actualizado con éxito")
 
 
     def buscar(self):
+        #Verifica condición de que se eligió un usuario para su modificación
         if self.comboUser.get() == "Elige una opción":
                 return messagebox.showwarning("Modificar Usuario","Error, selecciona un usuario")
 
-        self.valor = self.comboUser.get()
-
-        self.c.execute("SELECT * FROM Usuario WHERE correo = ?", (self.valor,))
+        #Query que selecciona toda la información del correo seleccionado por el usuario para modificar
+        self.c.execute("SELECT * FROM Usuario WHERE correo = ?", (self.comboUser.get(),))
         elUsuario=self.c.fetchall()
             
+        #Recorre los valores del usuario para insertarle su nuevo valor en la posición que le corresponde
         for usuario in elUsuario:
             
             self.idUsuario_var.set(usuario[0])
@@ -492,11 +506,6 @@ class GestionarUsuarioModificar:
             self.boxEmail_var.set(usuario[5])
             self.comboTipoUsuario.set(usuario[6])
             
-        """    
-        print( self.boxName_var.get(), self.boxLastname_var.get(), 
-        self.boxPassword_var.get(),self.boxEmail_var.get(),
-        self.comboTipoUsuario.get(),self.comboCamara.get(),self.idUsuario_var.get())"""
-
         self.db.commit()
 
 
@@ -559,19 +568,19 @@ class GenerarReporteBusqueda:
         self.boxPlate = Entry(self.windowSubmenuRPGenerarReporte, textvariable = self.boxPlate_var)
         self.boxPlate.place(x=105, y=45, width=180, height=25)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Marca" ).place(x=5, y=75)
+        Label(self.windowSubmenuRPGenerarReporte, text = "Marca:" ).place(x=5, y=75)
         self.comboMarca = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values = self.resultMarca)
         self.comboMarca.set("Marca")
         self.comboMarca.place(x=105, y=75, width=180, height=25)
         self.buttonBuscarModelo = Button(self.windowSubmenuRPGenerarReporte, text = "Buscar Modelo", command = self.obtenerModelo)
         self.buttonBuscarModelo.place(x=120, y=105, width=140, height=30)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Modelo" ).place(x=5, y=145)
+        Label(self.windowSubmenuRPGenerarReporte, text = "Modelo:" ).place(x=5, y=145)
         self.comboModelo = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values =  self.listaModelo) 
         self.comboModelo.set("Modelo")
         self.comboModelo.place(x=105, y=145, width=180, height=25)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Color" ).place(x=5, y=175)
+        Label(self.windowSubmenuRPGenerarReporte, text = "Color:" ).place(x=5, y=175)
         self.comboColor = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values =  self.listaColores) 
         self.comboColor.set("Color")
         self.comboColor.place(x=105, y=175, width=180, height=25)
@@ -660,69 +669,86 @@ class ObtenerReporteAlerta:
     
     ################ ADMINISTRADOR – REPORTE DE PLACAS – OBTENER REPORTE ###############
     def __init__(self, args):
+
+        #Crea lista y abre y lee el archivo donde se almacenan los reportes de alerta
         self.listaPlacas = []
         with open('ReporteAlerta.json', 'r') as file:
+            #Convierte los datos Json en datos equivalentes a Python
             placasJson = json.load(file)
+            #Ciclo que agrega a la lista cada valor del archivo json
             for self.placaJson in placasJson:
                 self.listaPlacas.append(self.placaJson["Placa"])
+            #Ordena los datos de la lista
             self.listaPlacas.sort()
             
-
+        #Datos primarios de la ventana
         self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
-        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x400+500+250")
+        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
         #COLUMNA DE LABES, BOXES
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Ingresa la placa para obtener el reporte:" ).place(x=5, y=45)
        
+        #Placa
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Placa:" ).place(x=5, y=75)
         self.comboPlaca = ttk.Combobox(self.windowSubmenuRPObtenerReporteAlerta,  state = "readonly")
         self.comboPlaca ["values"] = self.listaPlacas
         self.comboPlaca.set("Placa")
         self.comboPlaca.place(x=50, y=75, width=130, height=30)
 
+        #Aceptar
         self.buttonAceptar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Aceptar", command = self.buscaReporteAlerta)
         self.buttonAceptar.place(x=200, y=75, width=80, height=30)
-
+        
+        #Texto del reporte
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "El reporte generado es:" ).place(x=5, y=110)
         self.textReporteGenerado = Text(self.windowSubmenuRPObtenerReporteAlerta, state = "normal")
         self.textReporteGenerado.place(x=5, y=140,  width=330, height=100)
 
         #COLUMNA DE BOTONES
-        self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.obtieneReporteAlerta)
-        self.buttonGuardar.place(x=50, y=250, width=100, height=30) #AQUI PORNER UN MENSAJE DE SE GUARDO CORRECTAMENTE,
+        self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.guardaReporteAlerta)
+        self.buttonGuardar.place(x=50, y=250, width=100, height=30)
         self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar", command = lambda : ReportePlacas(self.windowSubmenuRPObtenerReporteAlerta.withdraw()))
         self.buttonRegresar.place(x=200, y=250, width=100, height=30)
 
 
     def buscaReporteAlerta(self):
+        #Limpia el widget Text cada que se va a ingresar nueva información
         self.textReporteGenerado.delete('1.0', tk.END)
         
+        #Condional que verifica que se haya seleccionado una opción
         if self.comboPlaca.get() == "Placa":
             return messagebox.showwarning("Obtener Reporte","Error, selecciona una placa")
-        #else:
-        #    print(self.comboPlaca.get())
         
+        #Abre el archivo donde se almacenan los reportes de alerta y lo lee
         with open('ReporteAlerta.json', 'r') as file:
-            profiles = json.load(file)
+            profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
             
+            #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
             for profile in profiles:
                 if profile["Placa"] == self.comboPlaca.get():
-                    profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime bonito el JSON
-                    self.textReporteGenerado.insert('1.0', profile1)#inserta valor en el widget text
-            
+                    profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime los datos en formato JSON
+                    self.textReporteGenerado.insert('1.0', profile1)#Inserta el valor completo de la placa en el widget text
+        
+        #Almacena el valor obtenido en el widget
         self.datosGuardarTxt = self.textReporteGenerado.get('1.0', tk.END+"-1c")
-        #self.comboPlaca.set("Placa")
 
-    def obtieneReporteAlerta(self):
+    def guardaReporteAlerta(self):
+        #Condicional que verifica si hay información dentro del widget Text
         if self.textReporteGenerado.get('1.0', tk.END+"-1c") == "": #-1c significa que la posición está un carácter por delante de "end"
             return messagebox.showwarning("Guardar Reporte","No hay nada que guardar")
 
+        #Crea un archivo de escritura con el nombre de la placa seleccionada en el combobox
         file = open(f"./ObtenerReporteGuardados/{self.comboPlaca.get()}.txt", "w")
+        #Escribe los datos obtenidos en el widget Text
         file.write(f"{self.datosGuardarTxt}")
-        #file.close()
+        #Limpia el widget Text
         self.textReporteGenerado.delete('1.0', tk.END)
+
+        #Limpia los valores del combobox de la placa
+        self.comboPlaca ["values"]= self.listaPlacas
+        self.comboPlaca.set("Placa")
         return messagebox.showinfo("Guardar Reporte","Registro guardado con éxito")
 
 ######################################################################################################################################################        

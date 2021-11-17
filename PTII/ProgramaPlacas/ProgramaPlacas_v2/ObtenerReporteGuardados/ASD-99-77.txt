@@ -1,0 +1,6 @@
+{
+    "Placa": "ASD-99-77",
+    "Marca": "BMW",
+    "Modelo": "Serie 4",
+    "Color": "Gris"
+}

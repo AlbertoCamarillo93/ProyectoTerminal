@@ -72,7 +72,12 @@ class ObtenerReporteAlerta:
         file.write(f"{self.datosGuardarTxt}")
         #file.close()
         self.textReporteGenerado.delete('1.0', tk.END)
+
+        self.comboPlaca ["values"]= self.listaPlacas
+        self.comboPlaca.set("Placa")
+
         return messagebox.showinfo("Guardar Reporte","Registro guardado con éxito")
+
             
 
 args = ""   

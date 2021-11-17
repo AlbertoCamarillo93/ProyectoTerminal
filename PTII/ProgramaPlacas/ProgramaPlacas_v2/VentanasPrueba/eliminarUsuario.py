@@ -17,7 +17,7 @@ class GestionarUsuarioElimina():
             self.result.append(row[0])
 
         self.windowSubmenuGUEliminarCuenta = Tk()
-        self.windowSubmenuGUEliminarCuenta.geometry("350x300+500+250")
+        self.windowSubmenuGUEliminarCuenta.geometry("350x200+500+250")
         self.windowSubmenuGUEliminarCuenta.title("Gestión Usuarios/Eliminar Cuenta")
         Label(self.windowSubmenuGUEliminarCuenta, text = "Eliminar Cuenta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
