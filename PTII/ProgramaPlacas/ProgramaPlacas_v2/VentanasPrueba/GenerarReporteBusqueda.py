@@ -83,39 +83,42 @@ class GenerarReporteBusqueda:
 
         #if self.boxPlate.get() == "" or len(self.boxPlate.get()) > 9 or len(self.boxPlate.get()) < 7:
         ####CAMBIO --> Reorganización
-        if self.boxPlate.get() == "":
+        if self.opcion.get() == False:
+            return messagebox.showerror("Genear Reporte","Error, selecciona un tipo de placa")
+        elif self.boxPlate.get() == "":
             return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
-        elif len(self.boxPlate.get()) > 9:
-            return messagebox.showerror("Genear Reporte","Error, campo Placa excede caracteres permitidos")
-        elif len(self.boxPlate.get()) < 7:
-            return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
+        
         
         #Placa CDMX
         if self.opcion.get() == 1:
-            len(self.boxPlate.get()) == 7
-            for indice in range(len(self.boxPlate.get())):
-                caracter = '-'
-                if self.boxPlate.get()[0] not in self.listaNumeros and self.boxPlate.get()[0] not in self.listaAbecedario:
-                     return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra o número en la posición 1")
-                elif self.boxPlate.get()[1] not in self.listaNumeros or self.boxPlate.get()[2] not in self.listaNumeros:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener número en la posición 2 y 3")
-                elif caracter != self.boxPlate.get()[3]:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la tercer posición")
-                elif self.boxPlate.get()[4] not in self.listaAbecedario or self.boxPlate.get()[5] not in self.listaAbecedario or self.boxPlate.get()[6] not in self.listaAbecedario:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra en los últimos tres caractéres")
-                    
+            if len(self.boxPlate.get()) == 7:
+                for indice in range(len(self.boxPlate.get())):
+                    caracter = '-'
+                    if self.boxPlate.get()[0] not in self.listaNumeros and self.boxPlate.get()[0] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif self.boxPlate.get()[1] not in self.listaNumeros or self.boxPlate.get()[2] not in self.listaNumeros:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif caracter != self.boxPlate.get()[3]:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif self.boxPlate.get()[4] not in self.listaAbecedario or self.boxPlate.get()[5] not in self.listaAbecedario or self.boxPlate.get()[6] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+            else:
+                return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                   
         
         #Placa EdoMex
         if self.opcion.get() == 2:
-            len(self.boxPlate.get()) == 9
-            for indice in range(len(self.boxPlate.get())):
-                caracter = '-'
-                if caracter != self.boxPlate.get()[3] or caracter != self.boxPlate.get()[6]:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la cuarta y séptima posición")
-                elif self.boxPlate.get()[0] not in self.listaAbecedario or self.boxPlate.get()[1] not in self.listaAbecedario or self.boxPlate.get()[2] not in self.listaAbecedario:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra en los primeros tres caracteres")
-                elif self.boxPlate.get()[4] not in self.listaNumeros or self.boxPlate.get()[5] not in self.listaNumeros or self.boxPlate.get()[7] not in self.listaNumeros or self.boxPlate.get()[8] not in self.listaNumeros:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener número en la posición 5,6,8,9")
+            if len(self.boxPlate.get()) == 9:
+                for indice in range(len(self.boxPlate.get())):
+                    caracter = '-'
+                    if caracter != self.boxPlate.get()[3] or caracter != self.boxPlate.get()[6]:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+                    elif self.boxPlate.get()[0] not in self.listaAbecedario or self.boxPlate.get()[1] not in self.listaAbecedario or self.boxPlate.get()[2] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+                    elif self.boxPlate.get()[4] not in self.listaNumeros or self.boxPlate.get()[5] not in self.listaNumeros or self.boxPlate.get()[7] not in self.listaNumeros or self.boxPlate.get()[8] not in self.listaNumeros:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+            else:
+                return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
         ####CAMBIO
 
         if self.comboMarca.get() == "Marca": ####CAMBIO elif --> if
