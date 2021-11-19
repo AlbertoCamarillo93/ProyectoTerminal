@@ -13,7 +13,6 @@ from tkinter import messagebox
 
 
 class Login:
-
     #EL MÉTODO __init__ ES UN CONSTRUCTOR, Y SIEMPRE LLEVA AL MENOS UN ARGUMENTO (self).
     #ESTE MÉTDOO, TIENE TAMBIÉN COMO FUNCIÓN DECLARAR LOS VALORES DE INICIO DE LAS VARIABLES DE CLASE, ES DECIR, INICIALIZAR LAS VARIABLES, PARA LOGRAR ESTO,
     #SE DECLARAN LOS ARGUMENTOS QUE SEAN NECESARIOS.
@@ -71,7 +70,6 @@ class Login:
     def prueba(self):
         self.boxEmail.get()
 
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
@@ -89,7 +87,6 @@ class Administrador():
         Label(self.windowMenuAdmin, text = "Nombre" ).place(x=5, y=75)
         Label(self.windowMenuAdmin, text = "Datos Contacto" ).place(x=5, y=105)
 
-
         #COLUMNA DE BOTONES
         self.buttonGestionarUsuario = Button(self.windowMenuAdmin, text = "Gestión de usuarios", command = lambda : GestionarUsuario(self.windowMenuAdmin.withdraw()))
         self.buttonGestionarUsuario.place(x=200, y=45, width=120, height=30)
@@ -104,11 +101,9 @@ class Administrador():
     def menuAdmin(self):
         pass       
 
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
-
 
 class User():
     
@@ -143,7 +138,6 @@ class User():
 ######################################################################################################################################################
 ######################################################################################################################################################
 
-
 class GestionarUsuario():
     
     def __init__(self, args):
@@ -167,14 +161,12 @@ class GestionarUsuario():
         self.buttonregresar.place(x=260, y=160, width=80, height=30) 
 
 
-    ################ ADMINISTRADOR – GESTIÓN DE USUARIOS ###############
     def gestionUsuarios(self):
         pass
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
-
 
 class GestionarUsuarioElimina():
 
@@ -231,12 +223,9 @@ class GestionarUsuarioElimina():
         self.db.commit()
         messagebox.showinfo("Eliminar Usuario","Registro borrado con éxito") 
         
-
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
-
 
 class GestionarUsuarioCrear:
     
@@ -356,11 +345,9 @@ class GestionarUsuarioCrear:
 
         messagebox.showinfo("Crear Usuario","Registro insertado con éxito")
 
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
-
 
 class GestionarUsuarioModificar:  
     ################ ADMINISTRADOR – GESTIÓN DE USUARIO – MODIFICAR CUENTA ###############
@@ -439,7 +426,6 @@ class GestionarUsuarioModificar:
         self.comboCamara = ttk.Combobox(self.windowSubmenuGUModificarCuenta, state = "readonly", values = self.resultCamara)
         self.comboCamara.place(x=120, y=225, width=180, height=25)
 
-        
         #COLUMNA DE BOTONES
         self.buttonModificar = Button(self.windowSubmenuGUModificarCuenta, text = "Modificar", command = self.modificarUsuario)
         self.buttonModificar.place(x=120, y=265, width=80, height=30)
@@ -508,11 +494,9 @@ class GestionarUsuarioModificar:
             
         self.db.commit()
 
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
-
 
 class ReportePlacas():
 
@@ -528,11 +512,9 @@ class ReportePlacas():
         Button(self.windowSubmenuReportePlacas, text = "Generar Reporte de Busqueda",  command = lambda : GenerarReporteBusqueda(self.windowSubmenuReportePlacas.withdraw())).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
         Button(self.windowSubmenuReportePlacas, text = "Regresar", command = lambda : Administrador(self.windowSubmenuReportePlacas.withdraw())).place(x=260, y=160, width=80, height=30)
 
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
-
 
 class GenerarReporteBusqueda:
 
@@ -553,60 +535,110 @@ class GenerarReporteBusqueda:
         #Lista para guardar los valores de los modelos de autos
         self.listaModelo = []
 
-        #Lista para guardar los valores de los colores
+        #Lista con los valores de los colores
         self.listaColores = ['Amarillo', 'Azul', 'Blanco', 'Cafe', 'Dorado', 'Gris',   
                              'Morado', 'Naranja', 'Negro', 'Rojo', 'Rosa', 'Verde', 'Vino']
+        
+        #Lista con los valores del abecedario permitidos por las placas
+        self.listaAbecedario = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N', 'Ñ','O',
+                                'P','Q','R','S','T','U','V','W','X','Y','Z',
+                                'a','b','c','d','e','f','g','h','i','j','k','l','m','n', 'ñ','o',
+                                'p','q','r','s','t','u','v','w','x','y','z']
+        
+        #Lista con los valores los numeros permitidos por las placas
+        self.listaNumeros = ['0','1','2','3','4','5','6','7','8','9']
 
+        #Configuraciones básicas de la ventana
         self.windowSubmenuRPGenerarReporte = Toplevel()
         self.windowSubmenuRPGenerarReporte.geometry("350x300+500+250")
         self.windowSubmenuRPGenerarReporte.title("Reporte de Placas/Generar Reporte")
         Label(self.windowSubmenuRPGenerarReporte, text = "Generar Reporte Busqueda" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
-        #COLUMNA DE LABES, BOXES
-        Label(self.windowSubmenuRPGenerarReporte, text = "Placa:" ).place(x=5, y=45)
+        #RADIOBUTTON
+        self.opcion = IntVar()
+        self.buttonCDMX = Radiobutton(self.windowSubmenuRPGenerarReporte, text="Ciudad de México", variable= self.opcion, value=1, command= self.selectRadioButton)
+        self.buttonCDMX.place(x=20, y=45)
+        self.buttonEdoMex = Radiobutton(self.windowSubmenuRPGenerarReporte, text="Estado de México", variable= self.opcion, value=2, command= self.selectRadioButton)
+        self.buttonEdoMex.place(x=160, y=45)
+
+        #BLOQUE DE LABELS, BOXES
+        #Placa
+        Label(self.windowSubmenuRPGenerarReporte, text = "Placa:" ).place(x=5, y=70)
         self.boxPlate_var = StringVar()
         self.boxPlate = Entry(self.windowSubmenuRPGenerarReporte, textvariable = self.boxPlate_var)
-        self.boxPlate.place(x=105, y=45, width=180, height=25)
+        self.boxPlate.place(x=105, y=70, width=180, height=25)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Marca:" ).place(x=5, y=75)
+        #Marca
+        Label(self.windowSubmenuRPGenerarReporte, text = "Marca:" ).place(x=5, y=105)
         self.comboMarca = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values = self.resultMarca)
         self.comboMarca.set("Marca")
-        self.comboMarca.place(x=105, y=75, width=180, height=25)
+        self.comboMarca.place(x=105, y=105, width=180, height=25)
         self.buttonBuscarModelo = Button(self.windowSubmenuRPGenerarReporte, text = "Buscar Modelo", command = self.obtenerModelo)
-        self.buttonBuscarModelo.place(x=120, y=105, width=140, height=30)
+        self.buttonBuscarModelo.place(x=120, y=140, width=140, height=30)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Modelo:" ).place(x=5, y=145)
+        #Modelo
+        Label(self.windowSubmenuRPGenerarReporte, text = "Modelo:" ).place(x=5, y=180)
         self.comboModelo = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values =  self.listaModelo) 
         self.comboModelo.set("Modelo")
-        self.comboModelo.place(x=105, y=145, width=180, height=25)
+        self.comboModelo.place(x=105, y=180, width=180, height=25)
 
-        Label(self.windowSubmenuRPGenerarReporte, text = "Color:" ).place(x=5, y=175)
+        #Color
+        Label(self.windowSubmenuRPGenerarReporte, text = "Color:" ).place(x=5, y=215)
         self.comboColor = ttk.Combobox(self.windowSubmenuRPGenerarReporte,  state = "readonly", values =  self.listaColores) 
         self.comboColor.set("Color")
-        self.comboColor.place(x=105, y=175, width=180, height=25)
+        self.comboColor.place(x=105, y=215, width=180, height=25)
 
-        #COLUMNA DE BOTONES
+        #BLOQUE DE BOTONES
         self.buttonAceptar = Button(self.windowSubmenuRPGenerarReporte, text = "Aceptar", command = self.generarReporteBusqueda)
-        self.buttonAceptar.place(x=105, y=220,  width=80, height=30)
+        self.buttonAceptar.place(x=105, y=250,  width=80, height=30)
         self.buttonRegresar = Button(self.windowSubmenuRPGenerarReporte, text = "Regresar", command = lambda : ReportePlacas(self.windowSubmenuRPGenerarReporte.withdraw()))
-        self.buttonRegresar.place(x=200, y=220, width=80, height=30)
+        self.buttonRegresar.place(x=200, y=250, width=80, height=30)
 
     def generarReporteBusqueda(self):
+        
+        #Verifica longitud del Entry boxPlate, para saber si es valido o no
+        if self.boxPlate.get() == "":
+            return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
+        elif len(self.boxPlate.get()) > 9:
+            return messagebox.showerror("Genear Reporte","Error, campo Placa excede caracteres permitidos")
+        elif len(self.boxPlate.get()) < 7:
+            return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
 
-        if self.boxPlate.get() == "" or len(self.boxPlate.get()) > 9 or len(self.boxPlate.get()) < 7:
-            if self.boxPlate.get() == "":
-                return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
-            elif len(self.boxPlate.get()) > 9:
-                return messagebox.showerror("Genear Reporte","Error, campo Placa excede caracteres permitidos")
-            else:
-                return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
-        elif self.comboMarca.get() == "Marca":
+        #Placa CDMX, verifica valor valido para placas de la CDMX
+        if self.opcion.get() == 1:
+            len(self.boxPlate.get()) == 7
+            for indice in range(len(self.boxPlate.get())):
+                caracter = '-'
+                if self.boxPlate.get()[0] not in self.listaNumeros and self.boxPlate.get()[0] not in self.listaAbecedario:
+                     return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra o número en la posición 1")
+                elif self.boxPlate.get()[1] not in self.listaNumeros or self.boxPlate.get()[2] not in self.listaNumeros:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener número en la posición 2 y 3")
+                elif caracter != self.boxPlate.get()[3]:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la tercer posición")
+                elif self.boxPlate.get()[4] not in self.listaAbecedario or self.boxPlate.get()[5] not in self.listaAbecedario or self.boxPlate.get()[6] not in self.listaAbecedario:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra en los últimos tres caractéres")
+                    
+        #Placa EdoMex, verifica valor valido para placas del EdoMex
+        if self.opcion.get() == 2:
+            len(self.boxPlate.get()) == 9
+            for indice in range(len(self.boxPlate.get())):
+                caracter = '-'
+                if caracter != self.boxPlate.get()[3] or caracter != self.boxPlate.get()[6]:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la cuarta y séptima posición")
+                elif self.boxPlate.get()[0] not in self.listaAbecedario or self.boxPlate.get()[1] not in self.listaAbecedario or self.boxPlate.get()[2] not in self.listaAbecedario:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra en los primeros tres caracteres")
+                elif self.boxPlate.get()[4] not in self.listaNumeros or self.boxPlate.get()[5] not in self.listaNumeros or self.boxPlate.get()[7] not in self.listaNumeros or self.boxPlate.get()[8] not in self.listaNumeros:
+                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener número en la posición 5,6,8,9")
+        
+        #Verifica que campo Marca, modelo y color no queden vacios
+        if self.comboMarca.get() == "Marca":
             return messagebox.showerror("Genear Reporte","Error, selecciona una marca")
         elif self.comboModelo.get() == "Modelo":
             return messagebox.showerror("Genear Reporte","Error, selecciona un modelo")
         elif self.comboColor.get() == "Color":
             return messagebox.showerror("Genear Reporte","Error, selecciona un color")
 
+        #Valores que toma el diccionario para insertarlos en el archivo json
         data_dict =  {
             "Placa"  : f"{self.boxPlate.get().upper()}",
             "Marca"  : f"{self.comboMarca.get()}",
@@ -614,6 +646,7 @@ class GenerarReporteBusqueda:
             "Color"  : f"{self.comboColor.get()}"
             }
 
+        #Bloque que lee, abre, y escribe en el archivo json los datos del diccionario
         fname = "PlacasReporteBusqueda.json"
         if os.path.isfile(fname):
             # File exists
@@ -626,12 +659,13 @@ class GenerarReporteBusqueda:
                 outfile.write('\n]')
                 outfile.write('\n}')
         else: 
-            # Create file
+            # Crea el archivo en caso de no existir
             with open(fname, 'w') as outfile:
                 array = []
                 array.append(data_dict)
                 json.dump(array, outfile)
 
+        #Limpia los valores a los predeterminados al finalizar
         self.boxPlate.delete(0, 'end')
         self.comboMarca.set("Marca")
         self.comboModelo.set("Modelo")
@@ -640,25 +674,35 @@ class GenerarReporteBusqueda:
         messagebox.showinfo("Genear Reporte","Reporte de busqueda generado con éxito")
 
     def obtenerModelo(self):
+        #Verifica que se elija una marca
         if self.comboMarca.get() == "Marca":
             return messagebox.showwarning("Genear Reporte","Error, selecciona una marca")
 
         self.valor = self.comboMarca.get()
-        
+        #Consulta la BD para traer de ella, los modelos correspondientes a la marca elegida
         self.c2.execute("SELECT Modelo FROM MarcaModelo WHERE Marca = ? ORDER BY Modelo ASC", (self.valor,))
         
+        #Verifica si la lista esta vacia, si es así agrega los datos encontrados de la consulta
         if self.listaModelo == []:
             for modelo in  self.c2.fetchall():
                 self.listaModelo.append(modelo[0])
+        #Sino esta vacia la borra y agrega los datos de la consulta
         else:
             del self.listaModelo [:]
             for modelo in  self.c2.fetchall():
                 self.listaModelo.append(modelo[0])
 
-        #print ("dentro self.listaModelo - obtenerModelo:", self.listaModelo)
         self.db.commit
+        #Limpia el combobox del modelo
         self.comboModelo ["values"]= self.listaModelo
         self.comboModelo.set("Modelo")
+
+    def selectRadioButton(self):
+        #Verifica el radioButton seleccionado y devuelve en el widget entry el formato de placa según sea el caso
+        if self.opcion.get() == 1:
+            self.boxPlate_var.set("A00-AAA / 000-AAA")
+        else:
+            self.boxPlate_var.set("AAA-00-00")
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
