@@ -597,38 +597,40 @@ class GenerarReporteBusqueda:
     def generarReporteBusqueda(self):
         
         #Verifica longitud del Entry boxPlate, para saber si es valido o no
-        if self.boxPlate.get() == "":
+        if self.opcion.get() == False:
+            return messagebox.showerror("Genear Reporte","Error, selecciona un tipo de placa")
+        elif self.boxPlate.get() == "":
             return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
-        elif len(self.boxPlate.get()) > 9:
-            return messagebox.showerror("Genear Reporte","Error, campo Placa excede caracteres permitidos")
-        elif len(self.boxPlate.get()) < 7:
-            return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
 
         #Placa CDMX, verifica valor valido para placas de la CDMX
         if self.opcion.get() == 1:
-            len(self.boxPlate.get()) == 7
-            for indice in range(len(self.boxPlate.get())):
-                caracter = '-'
-                if self.boxPlate.get()[0] not in self.listaNumeros and self.boxPlate.get()[0] not in self.listaAbecedario:
-                     return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra o número en la posición 1")
-                elif self.boxPlate.get()[1] not in self.listaNumeros or self.boxPlate.get()[2] not in self.listaNumeros:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener número en la posición 2 y 3")
-                elif caracter != self.boxPlate.get()[3]:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la tercer posición")
-                elif self.boxPlate.get()[4] not in self.listaAbecedario or self.boxPlate.get()[5] not in self.listaAbecedario or self.boxPlate.get()[6] not in self.listaAbecedario:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra en los últimos tres caractéres")
-                    
+            if len(self.boxPlate.get()) == 7:
+                for indice in range(len(self.boxPlate.get())):
+                    caracter = '-'
+                    if self.boxPlate.get()[0] not in self.listaNumeros and self.boxPlate.get()[0] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif self.boxPlate.get()[1] not in self.listaNumeros or self.boxPlate.get()[2] not in self.listaNumeros:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif caracter != self.boxPlate.get()[3]:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif self.boxPlate.get()[4] not in self.listaAbecedario or self.boxPlate.get()[5] not in self.listaAbecedario or self.boxPlate.get()[6] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+            else:
+                return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+        
         #Placa EdoMex, verifica valor valido para placas del EdoMex
         if self.opcion.get() == 2:
-            len(self.boxPlate.get()) == 9
-            for indice in range(len(self.boxPlate.get())):
-                caracter = '-'
-                if caracter != self.boxPlate.get()[3] or caracter != self.boxPlate.get()[6]:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener \"-\" en la cuarta y séptima posición")
-                elif self.boxPlate.get()[0] not in self.listaAbecedario or self.boxPlate.get()[1] not in self.listaAbecedario or self.boxPlate.get()[2] not in self.listaAbecedario:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener letra en los primeros tres caracteres")
-                elif self.boxPlate.get()[4] not in self.listaNumeros or self.boxPlate.get()[5] not in self.listaNumeros or self.boxPlate.get()[7] not in self.listaNumeros or self.boxPlate.get()[8] not in self.listaNumeros:
-                    return messagebox.showerror("Genear Reporte","Error, campo Placa debe tener número en la posición 5,6,8,9")
+            if len(self.boxPlate.get()) == 9:
+                for indice in range(len(self.boxPlate.get())):
+                    caracter = '-'
+                    if caracter != self.boxPlate.get()[3] or caracter != self.boxPlate.get()[6]:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+                    elif self.boxPlate.get()[0] not in self.listaAbecedario or self.boxPlate.get()[1] not in self.listaAbecedario or self.boxPlate.get()[2] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+                    elif self.boxPlate.get()[4] not in self.listaNumeros or self.boxPlate.get()[5] not in self.listaNumeros or self.boxPlate.get()[7] not in self.listaNumeros or self.boxPlate.get()[8] not in self.listaNumeros:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+            else:
+                return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
         
         #Verifica que campo Marca, modelo y color no queden vacios
         if self.comboMarca.get() == "Marca":
@@ -901,31 +903,51 @@ class MonitoreaCamara:
         #Lista para guardar los valores de los modelos de autos
         self.listaModelo = []
 
-        #Lista para guardar los valores de los colores
+        #Lista con los valores de los colores
         self.listaColores = ['Amarillo', 'Azul', 'Blanco', 'Cafe', 'Dorado', 'Gris',   
                              'Morado', 'Naranja', 'Negro', 'Rojo', 'Rosa', 'Verde', 'Vino']
+        
+        #Lista con los valores del abecedario permitidos por las placas
+        self.listaAbecedario = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N', 'Ñ','O',
+                                'P','Q','R','S','T','U','V','W','X','Y','Z',
+                                'a','b','c','d','e','f','g','h','i','j','k','l','m','n', 'ñ','o',
+                                'p','q','r','s','t','u','v','w','x','y','z']
+        
+        #Lista con los valores los numeros permitidos por las placas
+        self.listaNumeros = ['0','1','2','3','4','5','6','7','8','9']
 
+        #Configuración básica de la ventana
         self.windowSubmenuMonitoreaCamara = Toplevel()
         self.windowSubmenuMonitoreaCamara.geometry("850x500+500+250")
         self.windowSubmenuMonitoreaCamara.title("Menu Usuario/Monitorear Cámara")
         Label(self.windowSubmenuMonitoreaCamara, text = "Monitorear Cámara" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
         
-        #COLUMNA DE COMBOBOX    
-        Label(self.windowSubmenuMonitoreaCamara, text = "Seleccionar Cámara:").place(x=5, y=45)
+        #COLUMNA DE COMBOBOX   
+        # Cámara 
+        Label(self.windowSubmenuMonitoreaCamara, text = "Seleccionar Cámara:").place(x=5, y=40)
         self.camara = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values = self.result)
         self.camara.set("Elige una opción")
-        self.camara.place(x=120, y=45, width=130, height=25)
+        self.camara.place(x=120, y=40, width=130, height=25)
         self.btnVisualizar = Button(self.windowSubmenuMonitoreaCamara, text="Visualizar video", command=self.visualizarVideo)
-        self.btnVisualizar.place(x=260, y=45, width=100, height=25)
+        self.btnVisualizar.place(x=260, y=40, width=100, height=25)
 
         #COLUMNA DE VALORES
-        Label(self.windowSubmenuMonitoreaCamara, text = "Datos de la placa detectada" ).place(x=5, y=95)
+        Label(self.windowSubmenuMonitoreaCamara, text = "Datos de la placa detectada" ).place(x=5, y=70)
+        
+        #RADIOBUTTON
+        self.opcion = IntVar()
+        self.buttonCDMX = Radiobutton(self.windowSubmenuMonitoreaCamara, text="Ciudad de México", variable= self.opcion, value=1, command= self.selectRadioButton)
+        self.buttonCDMX.place(x=5, y=90)
+        self.buttonEdoMex = Radiobutton(self.windowSubmenuMonitoreaCamara, text="Estado de México", variable= self.opcion, value=2, command= self.selectRadioButton)
+        self.buttonEdoMex.place(x=5, y=110)
 
+        #Placa
         Label(self.windowSubmenuMonitoreaCamara, text = "Placa" ).place(x=5, y=130)
         self.entryPlaca_var = StringVar()
         self.entryPlaca = Entry(self.windowSubmenuMonitoreaCamara, textvariable = self.entryPlaca_var)
         self.entryPlaca.place(x=5, y=150, width=160, height=25)
 
+        #Marca
         Label(self.windowSubmenuMonitoreaCamara, text = "Marca" ).place(x=5, y=180)
         self.comboMarca = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values = self.resultMarca)
         self.comboMarca.set("Marca")
@@ -933,16 +955,19 @@ class MonitoreaCamara:
         self.buttonBuscarModelo = Button(self.windowSubmenuMonitoreaCamara, text = "Buscar Modelo", command = self.obtenerModelo)
         self.buttonBuscarModelo.place(x=10, y=230, width=160, height=30)
 
+        #Modelo
         Label(self.windowSubmenuMonitoreaCamara, text = "Modelo" ).place(x=5, y=270)
         self.comboModelo = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values =  self.listaModelo) 
         self.comboModelo.set("Modelo")
         self.comboModelo.place(x=5, y=290, width=160, height=25)
 
+        #Color
         Label(self.windowSubmenuMonitoreaCamara, text = "Color" ).place(x=5, y=320)
         self.comboColor = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values =  self.listaColores) 
         self.comboColor.set("Color")
         self.comboColor.place(x=5, y=340, width=160, height=25)
 
+        #Video
         self.lblVideo = Label(self.windowSubmenuMonitoreaCamara, text = "" )
         self.lblVideo.place(x=185, y=105)
 
@@ -954,21 +979,51 @@ class MonitoreaCamara:
         self.buttonRegresar = Button(self.windowSubmenuMonitoreaCamara, text = "Regresar", command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
         self.buttonRegresar.place(x=10, y=420, width=160, height=30)
         
-        #self.windowSubmenuMonitoreaCamara.mainloop()
 
     def monitorearCamara(self):
         pass
 
     def generarReporteAlerta(self):
 
-        if self.entryPlaca.get() == "" or len(self.entryPlaca.get()) > 9 or len(self.entryPlaca.get()) < 7:
-            if self.entryPlaca.get() == "":
-                return messagebox.showwarning("Genear Reporte","Error, campo Placa no puede ir vacio")
-            elif len(self.entryPlaca.get()) > 9:
-                return messagebox.showwarning("Genear Reporte","Error, campo Placa excede caracteres permitidos")
+        #Verifica que button radio no este vacio ni el campo placa
+        if self.opcion.get() == False:
+            return messagebox.showerror("Genear Reporte","Error, selecciona un tipo de placa")
+        elif self.entryPlaca.get() == "":
+            return messagebox.showerror("Genear Reporte","Error, campo Placa no puede ir vacio")
+
+        #Placa CDMX, verifica valor valido para placas de la CDMX
+        if self.opcion.get() == 1:
+            if len(self.entryPlaca.get()) == 7:
+                for indice in range(len(self.entryPlaca.get())):
+                    caracter = '-'
+                    if self.entryPlaca.get()[0] not in self.listaNumeros and self.entryPlaca.get()[0] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif self.entryPlaca.get()[1] not in self.listaNumeros or self.entryPlaca.get()[2] not in self.listaNumeros:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif caracter != self.entryPlaca.get()[3]:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    elif self.entryPlaca.get()[4] not in self.listaAbecedario or self.entryPlaca.get()[5] not in self.listaAbecedario or self.entryPlaca.get()[6] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
             else:
-                return messagebox.showwarning("Genear Reporte","Error, campo Placa debe tener al menos 7 caracteres")
-        elif self.comboMarca.get() == "Marca":
+                return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
+                    
+        
+        #Placa EdoMex, verifica valor valido para placas del EdoMex
+        if self.opcion.get() == 2:
+            if len(self.entryPlaca.get()) == 9:
+                for indice in range(len(self.entryPlaca.get())):
+                    caracter = '-'
+                    if caracter != self.entryPlaca.get()[3] or caracter != self.entryPlaca.get()[6]:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+                    elif self.entryPlaca.get()[0] not in self.listaAbecedario or self.entryPlaca.get()[1] not in self.listaAbecedario or self.entryPlaca.get()[2] not in self.listaAbecedario:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+                    elif self.entryPlaca.get()[4] not in self.listaNumeros or self.entryPlaca.get()[5] not in self.listaNumeros or self.entryPlaca.get()[7] not in self.listaNumeros or self.entryPlaca.get()[8] not in self.listaNumeros:
+                        return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+            else:
+                return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con el siguiente formato: \n AAA-00-00")
+        
+        #Verifica que los campos Marca, Modelo, Color, no esten en valor por default
+        if self.comboMarca.get() == "Marca":
             return messagebox.showwarning("Genear Reporte","Error, selecciona una marca")
         elif self.comboModelo.get() == "Modelo":
             return messagebox.showwarning("Genear Reporte","Error, selecciona un modelo")
@@ -1006,35 +1061,42 @@ class MonitoreaCamara:
 
         messagebox.showinfo("Genear Reporte","Reporte de alerta generado con éxito")
 
-    def obtenerModelo(self):  
+    def obtenerModelo(self): 
+        #Verifica que marca no tenga valor por default 
         if self.comboMarca.get() == "Marca":
             return messagebox.showwarning("Genear Reporte","Error, selecciona una marca")
 
         self.valor = self.comboMarca.get()
         
+        #Consulta la BD y trae de regreso los modelos de la marca seleccionada
         self.c2.execute("SELECT Modelo FROM MarcaModelo WHERE Marca = ? ORDER BY Modelo ASC", (self.valor,))
         
+        #Verifica si la lista esta vacia, si lo esta, agrega los modelos de la consulta para la marca seleccionada
         if self.listaModelo == []:
             for modelo in  self.c2.fetchall():
                 self.listaModelo.append(modelo[0])
+        #Si la lista no esta vacia, borra todo y posteriormente agrega los modelos de la consulta para la marca seleccionada
         else:
             del self.listaModelo [:]
             for modelo in  self.c2.fetchall():
                 self.listaModelo.append(modelo[0])
 
-        #print ("dentro self.listaModelo - obtenerModelo:", self.listaModelo)
         self.db.commit
+        #Limpia el combobox de modelo
         self.comboModelo ["values"] = self.listaModelo
         self.comboModelo.set("Modelo")
 
     def visualizarVideo(self):
+        #Limpia el valor para nueva selección de video
         self.cap = None
 
+        #si el valor es no nada, se lanza el método release el cual bloquea el recurso en uso y, hasta que lo libera ningún otro subproceso puede acceder al mismo recurso
         if self.cap is not None:
             self.lblVideo.image = ""
             self.cap.release()
             self.cap = None
 
+        #Selecciona el video según la cámara elegida en el combobox
         self.video_path = ''
         if  self.camara.get() == "1":
             self.video_path = "autos1.mp4"
@@ -1050,14 +1112,15 @@ class MonitoreaCamara:
         self.camara.set("Elige una opción")
 
     def visualizar(self):
+        #Si el valor es no ninguno, lee
         if self.cap is not None:
             self.ret, self.frame = self.cap.read()
             if self.ret == True:
-                self.frame = imutils.resize(self.frame, width=640)
-                self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
+                self.frame = imutils.resize(self.frame, width=640)#Define el tamaño del frame
+                self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)#Convierte el espacio de un color a otro y define el RGB para reproducir el video
 
-                self.im = Img.fromarray(self.frame)
-                self.img = ImageTk.PhotoImage(image=self.im)
+                self.im = Img.fromarray(self.frame)#Crea una memoria de imagen a partir de un objeto que exporta la interfaz de matriz
+                self.img = ImageTk.PhotoImage(image=self.im)#Se usa  donde Tkinter espere un objeto de imagen.
 
                 self.lblVideo.configure(image=self.img)
                 self.lblVideo.image = self.img
@@ -1066,6 +1129,12 @@ class MonitoreaCamara:
                 print("No se selecciono nada")
                 self.lblVideo.image = ""
                 self.cap.release()
+
+    def selectRadioButton(self):
+        if self.opcion.get() == 1:
+            self.entryPlaca_var.set("A00-AAA / 000-AAA")
+        else:
+            self.entryPlaca_var.set("AAA-00-00")
         
 
 
