@@ -861,7 +861,7 @@ class ObtenerReporteAlertaUsuario:
         if self.textReporteGenerado.get('1.0', tk.END+"-1c") == "": #-1c significa que la posición está un carácter por delante de "end"
             return messagebox.showwarning("Guardar Reporte","No hay nada que guardar")
 
-        file = open(f"./ObtenerReporteGuardados/{self.comboPlaca.get()}.txt", "w")
+        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.comboPlaca.get()}.txt", "w")
         file.write(f"{self.datosGuardarTxt}")
         #file.close()
         self.textReporteGenerado.delete('1.0', tk.END)
