@@ -784,7 +784,7 @@ class ObtenerReporteAlerta:
             return messagebox.showwarning("Guardar Reporte","No hay nada que guardar")
 
         #Crea un archivo de escritura con el nombre de la placa seleccionada en el combobox
-        file = open(f"./ObtenerReporteGuardados/{self.comboPlaca.get()}.txt", "w")
+        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.comboPlaca.get()}.txt", "w")
         #Escribe los datos obtenidos en el widget Text
         file.write(f"{self.datosGuardarTxt}")
         #Limpia el widget Text
