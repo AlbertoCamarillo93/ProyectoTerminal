@@ -812,7 +812,7 @@ class ObtenerReporteAlertaUsuario:
             
 
         self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
-        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x400+500+250")
+        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
@@ -834,8 +834,8 @@ class ObtenerReporteAlertaUsuario:
 
         #COLUMNA DE BOTONES
         self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.obtieneReporteAlerta)
-        self.buttonGuardar.place(x=50, y=250, width=80, height=30) #AQUI PORNER UN MENSAJE DE SE GUARDO CORRECTAMENTE,
-        self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar", command = lambda : User(self.windowSubmenuRPObtenerReporteAlerta.withdraw())).place(x=250, y=360, width=80, height=30)
+        self.buttonGuardar.place(x=50, y=250, width=100, height=30)
+        self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar", command = lambda : User(self.windowSubmenuRPObtenerReporteAlerta.withdraw()))
         self.buttonRegresar.place(x=200, y=250, width=100, height=30)
 
     def buscaReporteAlerta(self):
