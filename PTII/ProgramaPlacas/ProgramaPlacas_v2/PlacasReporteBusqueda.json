@@ -45,6 +45,6 @@
         }
    ,{"Placa": "A33-ASD", "Marca": "Chevrolet", "Modelo": "Aveo", "Color": "Gris"}
 ,{"Placa": "ASD-99-77", "Marca": "CUPRA", "Modelo": "Formentor", "Color": "Azul"}
-,{"Placa": "GHI-999", "Marca": "Mercedes Benz", "Modelo": "GLA", "Color": "Morado"}
+,{"Placa": "GHI-999", "Marca": "Mercedes Benz", "Modelo": "GLA", "Color": "Morado"},{"Placa": "D34-GXZ", "Marca": "Nissan", "Modelo": "Sentra", "Color": "Cafe"}
 ]
 }
