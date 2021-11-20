@@ -1,6 +1,7 @@
 import json
 import os
 import cv2
+import config
 from PIL import Image as Img
 from PIL import ImageTk
 import imutils
@@ -49,6 +50,8 @@ class Login:
         #Query que selecciona al usuario y correo ingresado de la BD
         self.c.execute("SELECT * FROM Usuario WHERE correo=? AND password=?", (self.boxEmail.get(), self.boxPassword.get()))        
         row = self.c.fetchall() 
+
+        self.prueba()
         
         #Condicional que verifica tipo de usuario para enviarlo al menú correspondiente
         if row:
@@ -68,7 +71,30 @@ class Login:
         self.windowLogin.destroy()
 
     def prueba(self):
-        self.boxEmail.get()
+
+        self.c1 = self.db.cursor()
+        #Query que selecciona toda la información del correo seleccionado por el usuario para modificar
+        self.c1.execute("SELECT * FROM Usuario WHERE correo = ?", (self.boxEmail.get(),))
+        elUsuario=self.c1.fetchall()
+            
+        #Recorre los valores del usuario para insertarle su nuevo valor en la posición que le corresponde
+        for usuario in elUsuario:
+            
+            config.id_usuario = usuario[0]
+            config.camara = usuario[1]
+            config.nombre = usuario[2]
+            config.apellido = usuario[3]
+            config.contacto_usuario = usuario[5]
+            
+        self.db.commit()
+        
+        print(config.id_usuario,
+            config.camara,
+            config.nombre,
+            config.apellido,
+            config.contacto_usuario)
+        
+        return config.id_usuario, config.camara, config.nombre, config.apellido, config.contacto_usuario
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
@@ -77,15 +103,20 @@ class Login:
 class Administrador():
 
     def __init__(self, args):
-        self.windowMenuAdmin = Tk()
+        self.windowMenuAdmin = Toplevel()
         self.windowMenuAdmin.geometry("350x200+500+250")
         self.windowMenuAdmin.title("Menu Administrador")
-        Label(self.windowMenuAdmin, text = "Menu Administrador" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label(self.windowMenuAdmin, text = "Menu Administrador" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
         
         #COLUMNA DE ETIQUETAS
-        Label(self.windowMenuAdmin, text = "ID_Usuario" ).place(x=5, y=45)
-        Label(self.windowMenuAdmin, text = "Nombre" ).place(x=5, y=75)
-        Label(self.windowMenuAdmin, text = "Datos Contacto" ).place(x=5, y=105)
+        self.labelIdUsuario = Label(self.windowMenuAdmin, text = f"ID_Usuario \n{config.id_usuario}")
+        self.labelIdUsuario.place(x=25, y=45)
+        self.labelNombre =Label(self.windowMenuAdmin, text = f"Nombre \n{config.nombre} {config.apellido}" )
+        self.labelNombre.place(x=15, y=80)
+        self.labelDatosContacto = Label(self.windowMenuAdmin, text = f"Datos Contacto \n{config.contacto_usuario}" )
+        self.labelDatosContacto.place(x=15, y=120)
 
         #COLUMNA DE BOTONES
         self.buttonGestionarUsuario = Button(self.windowMenuAdmin, text = "Gestión de usuarios", command = lambda : GestionarUsuario(self.windowMenuAdmin.withdraw()))
@@ -96,10 +127,10 @@ class Administrador():
 
         self.buttonCerrarSesion = Button(self.windowMenuAdmin, text = "Cerrar Sesión", command = lambda : Login(self.windowMenuAdmin.withdraw()))
         self.buttonCerrarSesion.place(x=240, y=160, width=100, height=30)
+
+
         
 
-    def menuAdmin(self):
-        pass       
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
@@ -110,15 +141,21 @@ class User():
     def __init__(self, args):   
         #Login.prueba(self)
         self.windowMenuUser = Tk()
-        self.windowMenuUser.geometry("400x300+500+250")
+        self.windowMenuUser.geometry("400x200+500+250")
         self.windowMenuUser.title("Menu Usuario")
-        Label(self.windowMenuUser, text = "Menu Usuario" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
-    
+        labeltitulo = Label(self.windowMenuUser, text = "Menu Usuario" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
+        
         #COLUMNA DE ETIQUETAS
-        Label(self.windowMenuUser, text = "ID_Usuario" ).place(x=5, y=45)
-        Label(self.windowMenuUser, text = "Nombre" ).place(x=5, y=75)
-        Label(self.windowMenuUser, text = "Cámara" ).place(x=5, y=105)
-        Label(self.windowMenuUser, text = "Datos Contacto" ).place(x=5, y=135)
+        self.labelIdUsuario = Label(self.windowMenuUser, text = f"ID_Usuario \n{config.id_usuario}" )
+        self.labelIdUsuario.place(x=25, y=45)
+        self.labelNombre = Label(self.windowMenuUser, text = f"Nombre \n{config.nombre} {config.apellido}" )
+        self.labelNombre.place(x=25, y=80)
+        self.labelIdCamara = Label(self.windowMenuUser, text = f"Cámara \n {config.camara}" )
+        self.labelIdCamara.place(x=25, y=120)
+        self.labelDatosContacto = Label(self.windowMenuUser, text = f"Datos Contacto \n{config.contacto_usuario}" )
+        self.labelDatosContacto.place(x=15, y=150)
 
         #COLUMNA DE BOTONES
         self.buttonReporteAlerta = Button(self.windowMenuUser, text = "Obtener Reporte de Alertas", command = lambda : ObtenerReporteAlertaUsuario(self.windowMenuUser.withdraw()))
@@ -128,7 +165,7 @@ class User():
         self.buttonMonitorearCamara.place(x=200, y=90, width=180, height=30)
 
         self.buttonCerrarSesion = Button(self.windowMenuUser, text = "Cerrar Sesión", command = lambda : Login(self.windowMenuUser.withdraw()))
-        self.buttonCerrarSesion.place(x=270, y=260, width=100, height=30)
+        self.buttonCerrarSesion.place(x=200, y=135, width=180, height=30)
 
 
     def  menuUser(self, args):
