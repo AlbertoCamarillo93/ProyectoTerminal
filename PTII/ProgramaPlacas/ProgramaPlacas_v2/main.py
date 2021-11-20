@@ -6,8 +6,8 @@ args = ''
 
 window = Login(args)
 
-config.apellido = Login.prueba(args)
-config.camara = Login.prueba(args)
-config.contacto_usuario = Login.prueba(args)
-config.id_usuario = Login.prueba(args)
-config.nombre = Login.prueba(args)
+config.apellido = Login.obtieneVariablesGlobales(args)
+config.camara = Login.obtieneVariablesGlobales(args)
+config.contacto_usuario = Login.obtieneVariablesGlobales(args)
+config.id_usuario = Login.obtieneVariablesGlobales(args)
+config.nombre = Login.obtieneVariablesGlobales(args)

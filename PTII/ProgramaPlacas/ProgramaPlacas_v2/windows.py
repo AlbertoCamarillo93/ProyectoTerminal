@@ -51,7 +51,7 @@ class Login:
         self.c.execute("SELECT * FROM Usuario WHERE correo=? AND password=?", (self.boxEmail.get(), self.boxPassword.get()))        
         row = self.c.fetchall() 
 
-        self.prueba()
+        self.obtieneVariablesGlobales()
         
         #Condicional que verifica tipo de usuario para enviarlo al menú correspondiente
         if row:
@@ -70,7 +70,7 @@ class Login:
     def exit(self):
         self.windowLogin.destroy()
 
-    def prueba(self):
+    def obtieneVariablesGlobales(self):
 
         self.c1 = self.db.cursor()
         #Query que selecciona toda la información del correo seleccionado por el usuario para modificar
@@ -87,13 +87,7 @@ class Login:
             config.contacto_usuario = usuario[5]
             
         self.db.commit()
-        
-        print(config.id_usuario,
-            config.camara,
-            config.nombre,
-            config.apellido,
-            config.contacto_usuario)
-        
+                
         return config.id_usuario, config.camara, config.nombre, config.apellido, config.contacto_usuario
 
 ######################################################################################################################################################        
@@ -128,10 +122,6 @@ class Administrador():
         self.buttonCerrarSesion = Button(self.windowMenuAdmin, text = "Cerrar Sesión", command = lambda : Login(self.windowMenuAdmin.withdraw()))
         self.buttonCerrarSesion.place(x=240, y=160, width=100, height=30)
 
-
-        
-
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
@@ -140,7 +130,7 @@ class User():
     
     def __init__(self, args):   
         #Login.prueba(self)
-        self.windowMenuUser = Tk()
+        self.windowMenuUser = Toplevel()
         self.windowMenuUser.geometry("400x200+500+250")
         self.windowMenuUser.title("Menu Usuario")
         labeltitulo = Label(self.windowMenuUser, text = "Menu Usuario" )
@@ -167,10 +157,6 @@ class User():
         self.buttonCerrarSesion = Button(self.windowMenuUser, text = "Cerrar Sesión", command = lambda : Login(self.windowMenuUser.withdraw()))
         self.buttonCerrarSesion.place(x=200, y=135, width=180, height=30)
 
-
-    def  menuUser(self, args):
-        pass
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
@@ -182,7 +168,9 @@ class GestionarUsuario():
         self.windowSubmenuGestionUsuarios.geometry("350x200+500+250")
         self.windowSubmenuGestionUsuarios.title("Gestión Usuarios")
 
-        Label( self.windowSubmenuGestionUsuarios, text = "Gestión Usuarios" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label( self.windowSubmenuGestionUsuarios, text = "Gestión Usuarios" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
 
         #COLUMNA DE BOTONES
         self.buttonCrear = Button( self.windowSubmenuGestionUsuarios, text = "Crear Cuenta", command = lambda : GestionarUsuarioCrear(self.windowSubmenuGestionUsuarios.withdraw()))
@@ -196,10 +184,6 @@ class GestionarUsuario():
 
         self.buttonregresar = Button( self.windowSubmenuGestionUsuarios, text = "Regresar", command = lambda : Administrador(self.windowSubmenuGestionUsuarios.withdraw()))
         self.buttonregresar.place(x=260, y=160, width=80, height=30) 
-
-
-    def gestionUsuarios(self):
-        pass
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
@@ -223,9 +207,11 @@ class GestionarUsuarioElimina():
 
         #Valores primarios de la ventana
         self.windowSubmenuGUEliminarCuenta = Tk()
-        self.windowSubmenuGUEliminarCuenta.geometry("350x200+500+250")
+        self.windowSubmenuGUEliminarCuenta.geometry("350x150+500+250")
         self.windowSubmenuGUEliminarCuenta.title("Gestión Usuarios/Eliminar Cuenta")
-        Label(self.windowSubmenuGUEliminarCuenta, text = "Eliminar Cuenta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label(self.windowSubmenuGUEliminarCuenta, text = "Eliminar Cuenta" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
 
         #COLUMNA DE COMBOBOX
         Label( self.windowSubmenuGUEliminarCuenta, text = "Eliminar Cuenta:").place(x=5, y=45) 
@@ -292,7 +278,9 @@ class GestionarUsuarioCrear:
         self.windowSubmenuGUCrearCuenta = Tk()
         self.windowSubmenuGUCrearCuenta.geometry("350x300+500+250")
         self.windowSubmenuGUCrearCuenta.title("Gestión Usuarios/Crear Cuenta")
-        Label(self.windowSubmenuGUCrearCuenta, text = "Crear Cuenta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label(self.windowSubmenuGUCrearCuenta, text = "Crear Cuenta" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
 
         #COLUMNA DE LABES Y BOXES
         Label(self.windowSubmenuGUCrearCuenta, text = "Nombre:" ).place(x=5, y=45)
@@ -421,9 +409,11 @@ class GestionarUsuarioModificar:
 
         #Definiendo valores primarios de la ventana
         self.windowSubmenuGUModificarCuenta = Toplevel()
-        self.windowSubmenuGUModificarCuenta.geometry("350x350+500+250")
+        self.windowSubmenuGUModificarCuenta.geometry("350x320+500+250")
         self.windowSubmenuGUModificarCuenta.title("Gestión Usuarios/Modificar Cuenta")
-        Label(self.windowSubmenuGUModificarCuenta, text = "Modificar Cuenta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label(self.windowSubmenuGUModificarCuenta, text = "Modificar Cuenta" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
 
         #COLUMNA DE LABES, COMBOBOXES Y BOXES
         Label(self.windowSubmenuGUModificarCuenta, text = "Seleccionar Usuario:").place(x=5, y=45)
@@ -542,7 +532,9 @@ class ReportePlacas():
         self.windowSubmenuReportePlacas = Tk()
         self.windowSubmenuReportePlacas.geometry("350x200+500+250")
         self.windowSubmenuReportePlacas.title("Reporte de Placas")
-        Label(self.windowSubmenuReportePlacas, text = "Reporte de Placas" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label(self.windowSubmenuReportePlacas, text = "Reporte de Placas" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
 
         #COLUMNA DE BOTONES
         Button(self.windowSubmenuReportePlacas, text = "Obtener Reporte de Alertas", command = lambda : ObtenerReporteAlerta(self.windowSubmenuReportePlacas.withdraw())).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
@@ -589,8 +581,9 @@ class GenerarReporteBusqueda:
         self.windowSubmenuRPGenerarReporte = Toplevel()
         self.windowSubmenuRPGenerarReporte.geometry("350x300+500+250")
         self.windowSubmenuRPGenerarReporte.title("Reporte de Placas/Generar Reporte")
-        Label(self.windowSubmenuRPGenerarReporte, text = "Generar Reporte Busqueda" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
-
+        labeltitulo = Label(self.windowSubmenuRPGenerarReporte, text = "Generar Reporte Busqueda" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
         #RADIOBUTTON
         self.opcion = IntVar()
         self.buttonCDMX = Radiobutton(self.windowSubmenuRPGenerarReporte, text="Ciudad de México", variable= self.opcion, value=1, command= self.selectRadioButton)
@@ -768,8 +761,9 @@ class ObtenerReporteAlerta:
         self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
         self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
-        Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
-
+        labeltitulo = Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
         #COLUMNA DE LABES, BOXES
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Ingresa la placa para obtener el reporte:" ).place(x=5, y=45)
        
@@ -794,7 +788,6 @@ class ObtenerReporteAlerta:
         self.buttonGuardar.place(x=50, y=250, width=100, height=30)
         self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar", command = lambda : ReportePlacas(self.windowSubmenuRPObtenerReporteAlerta.withdraw()))
         self.buttonRegresar.place(x=200, y=250, width=100, height=30)
-
 
     def buscaReporteAlerta(self):
         #Limpia el widget Text cada que se va a ingresar nueva información
@@ -853,8 +846,9 @@ class ObtenerReporteAlertaUsuario:
         self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
         self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
-        Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
-
+        labeltitulo = Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
         #COLUMNA DE LABES, BOXES
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Ingresa la placa para obtener el reporte:" ).place(x=5, y=45)
        
@@ -915,19 +909,9 @@ class MonitoreaCamara:
     def __init__(self, args):
 
         #Conecta a la BD
-        self.db = sqlite3.connect('proyecto_placas.db')  
-        self.c = self.db.cursor()
+        self.db = sqlite3.connect('proyecto_placas.db')
         self.c1 = self.db.cursor()
         self.c2 = self.db.cursor()
-        
-
-        #Selecciona el id_camara de la tabla de Usuario
-        self.c.execute("SELECT DISTINCT id_camara FROM Usuario")   
-
-        #Lista para guardar los valores recorridos en el ciclo for
-        self.result = []
-        for row in self.c.fetchall():
-            self.result.append(row[0])
 
         #Selecciona la marca del auto de la tabla de MarcaModelo
         self.c1.execute("SELECT DISTINCT Marca FROM MarcaModelo ORDER BY Marca ASC")   
@@ -957,13 +941,15 @@ class MonitoreaCamara:
         self.windowSubmenuMonitoreaCamara = Toplevel()
         self.windowSubmenuMonitoreaCamara.geometry("850x500+500+250")
         self.windowSubmenuMonitoreaCamara.title("Menu Usuario/Monitorear Cámara")
-        Label(self.windowSubmenuMonitoreaCamara, text = "Monitorear Cámara" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo = Label(self.windowSubmenuMonitoreaCamara, text = "Monitorear Cámara" )
+        labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
+        labeltitulo.config(font=16)
         
         #COLUMNA DE COMBOBOX   
         # Cámara 
         Label(self.windowSubmenuMonitoreaCamara, text = "Seleccionar Cámara:").place(x=5, y=40)
-        self.camara = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values = self.result)
-        self.camara.set("Elige una opción")
+        self.camara = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly")
+        self.camara.set(config.camara)
         self.camara.place(x=120, y=40, width=130, height=25)
         self.btnVisualizar = Button(self.windowSubmenuMonitoreaCamara, text="Visualizar video", command=self.visualizarVideo)
         self.btnVisualizar.place(x=260, y=40, width=100, height=25)
@@ -1016,7 +1002,6 @@ class MonitoreaCamara:
         self.buttonRegresar = Button(self.windowSubmenuMonitoreaCamara, text = "Regresar", command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
         self.buttonRegresar.place(x=10, y=420, width=160, height=30)
         
-
     def monitorearCamara(self):
         pass
 
@@ -1173,15 +1158,12 @@ class MonitoreaCamara:
         else:
             self.entryPlaca_var.set("AAA-00-00")
         
-
-
 ######################################################################################################################################################        
 ######################################################################################################################################################
 ######################################################################################################################################################
 
 class GenerarReporteAlerta:
     pass
-
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
