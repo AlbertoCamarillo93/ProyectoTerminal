@@ -105,13 +105,21 @@ class MonitoreaCamara:
         self.buttonGenerar.place(x=10, y=380, width=160, height=30 )
         #self.buttonVisualizar = Button(self.windowSubmenuMonitoreaCamara, text = "Visualizar Alerta", command = lambda : VisualizarReporteAlerta.visualizarAlerta(self, self.windowSubmenuMonitoreaCamara.withdraw()))
         #self.buttonVisualizar.place(x=10, y=260, width=120, height=30)
+        self.buttonLimpiar = Button(self.windowSubmenuMonitoreaCamara, text = "Limpiar", command = self.LimpiarWidgets)#, command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
+        self.buttonLimpiar.place(x=10, y=420, width=160, height=30)
         self.buttonRegresar = Button(self.windowSubmenuMonitoreaCamara, text = "Regresar")#, command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
-        self.buttonRegresar.place(x=10, y=420, width=160, height=30)
+        self.buttonRegresar.place(x=10, y=460, width=160, height=30)
         
         self.windowSubmenuMonitoreaCamara.mainloop()
 
-    def monitorearCamara(self):
-        pass
+    def LimpiarWidgets(self):
+        self.opcion.set(0)
+        self.entryPlaca.delete(0, 'end')
+        self.comboMarca.set("Marca")
+        self.comboModelo.set("Modelo")
+        self.comboColor.set("Color")
+
+        #messagebox.showinfo("Genear Reporte","Campos ")
 
     def generarReporteAlerta(self):
         
