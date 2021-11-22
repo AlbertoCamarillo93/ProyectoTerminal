@@ -1,6 +1,7 @@
 import json
 import os
 import cv2
+import random
 import config
 from PIL import Image as Img
 from PIL import ImageTk
@@ -939,7 +940,13 @@ class MonitoreaCamara:
 
         #Configuración básica de la ventana
         self.windowSubmenuMonitoreaCamara = Toplevel()
-        self.windowSubmenuMonitoreaCamara.geometry("850x500+500+250")
+        #Centra la ventana a la mitad de la pantalla
+        ancho_ventana = 850
+        alto_ventana = 500
+        x_ventana = self.windowSubmenuMonitoreaCamara.winfo_screenwidth() // 2 - ancho_ventana // 2
+        y_ventana = self.windowSubmenuMonitoreaCamara.winfo_screenheight() // 2 - alto_ventana // 2
+        posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+        self.windowSubmenuMonitoreaCamara.geometry(posicion)
         self.windowSubmenuMonitoreaCamara.title("Menu Usuario/Monitorear Cámara")
         labeltitulo = Label(self.windowSubmenuMonitoreaCamara, text = "Monitorear Cámara" )
         labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
@@ -999,9 +1006,18 @@ class MonitoreaCamara:
         self.buttonGenerar.place(x=10, y=380, width=160, height=30 )
         #self.buttonVisualizar = Button(self.windowSubmenuMonitoreaCamara, text = "Visualizar Alerta", command = lambda : VisualizarReporteAlerta.visualizarAlerta(self, self.windowSubmenuMonitoreaCamara.withdraw()))
         #self.buttonVisualizar.place(x=10, y=260, width=120, height=30)
+        self.buttonLimpiar = Button(self.windowSubmenuMonitoreaCamara, text = "Limpiar", command = self.LimpiarWidgets)#, command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
+        self.buttonLimpiar.place(x=10, y=420, width=160, height=30)
         self.buttonRegresar = Button(self.windowSubmenuMonitoreaCamara, text = "Regresar", command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
-        self.buttonRegresar.place(x=10, y=420, width=160, height=30)
-        
+        self.buttonRegresar.place(x=10, y=460, width=160, height=30)
+
+    def LimpiarWidgets(self):
+        self.opcion.set(0)
+        self.entryPlaca.delete(0, 'end')
+        self.comboMarca.set("Marca")
+        self.comboModelo.set("Modelo")
+        self.comboColor.set("Color")
+
     def monitorearCamara(self):
         pass
 
