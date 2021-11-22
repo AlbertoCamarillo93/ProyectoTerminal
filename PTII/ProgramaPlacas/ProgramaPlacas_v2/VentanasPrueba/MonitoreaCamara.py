@@ -14,7 +14,7 @@ class MonitoreaCamara:
     def __init__(self, args):
 
         #Conecta a la BD
-        self.db = sqlite3.connect('proyecto_placas.db')  
+        self.db = sqlite3.connect('proyecto_placas_pruebas.db')  
         self.c = self.db.cursor()
         self.c1 = self.db.cursor()
         self.c2 = self.db.cursor()
@@ -176,6 +176,7 @@ class MonitoreaCamara:
             return messagebox.showwarning("Genear Reporte","Error, selecciona un color")
 
         data_dict =  {
+            "Camara" : f"{self.camara.get()}",
             "Placa"  : f"{self.entryPlaca.get().upper()}",
             "Marca"  : f"{self.comboMarca.get()}",
             "Modelo" : f"{self.comboModelo.get()}",

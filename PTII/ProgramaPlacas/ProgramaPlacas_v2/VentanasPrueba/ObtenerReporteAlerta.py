@@ -64,21 +64,14 @@ class ObtenerReporteAlerta:
 
         self.db = sqlite3.connect('proyecto_placas_pruebas.db')
         self.c1 = self.db.cursor()       
-
-        #Selecciona valores de la tabla de Camara 
-        self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (config.camara)) 
-        
-        self.result = []
-        for row in self.c1.fetchall():
-            self.result.append(row) 
-        print(self.result)
-        
-        
+       
         with open('ReporteAlerta.json', 'r') as file:
             profiles = json.load(file)
-            
+       
             for profile in profiles:
                 if profile["Placa"] == self.comboPlaca.get():
+                    self.camaraSalvar = profile['Camara']
+                    print('camaraSalvar:', profile['Camara'])
                     profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime bonito el JSON
                     self.textReporteGenerado.insert('1.0', profile1)#inserta valor en el widget text
             
@@ -87,7 +80,13 @@ class ObtenerReporteAlerta:
                     self.placaSalvar = client['Placa']
                     print('PlacaSalvar:', client['Placa'])
 
-                #print('Placa:', client['Placa'])
+            #Selecciona valores de la tabla de Camara 
+            self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (self.camaraSalvar)) 
+            
+            self.result = []
+            for row in self.c1.fetchall():
+                self.result.append(row) 
+            print(self.result)
 
         idCamara = self.result[0][0]
         calle = self.result[0][1]

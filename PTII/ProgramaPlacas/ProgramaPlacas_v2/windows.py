@@ -809,15 +809,6 @@ class ObtenerReporteAlerta:
         self.db = sqlite3.connect('proyecto_placas.db')
         self.c1 = self.db.cursor()       
 
-        #Selecciona valores de la tabla de Camara 
-        self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (config.camara,)) 
-        
-        #Almacena en lista datosJson los valores de la consulta a la BD
-        self.datosJson = []
-        for row in self.c1.fetchall():
-            self.datosJson.append(row)
-            
-        
         #Abre el archivo donde se almacenan los reportes de alerta y lo lee
         with open('ReporteAlerta.json', 'r') as file:
             profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
@@ -825,6 +816,7 @@ class ObtenerReporteAlerta:
             #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
             for data in profiles:
                 if data["Placa"] == self.comboPlaca.get():
+                    self.camaraSalvar = data['Camara']
                     profile1 = json.dumps(data, indent=4, sort_keys=False)#Imprime los datos en formato JSON
                     self.textReporteGenerado.insert('1.0', profile1)#Inserta el valor completo de la placa en el widget text
 
@@ -832,8 +824,16 @@ class ObtenerReporteAlerta:
         for plate in profiles:
             if plate['Placa'] == self.comboPlaca.get():
                 self.placaSalvar = plate['Placa']
-                continue
-
+        
+        
+        #Selecciona valores de la tabla de Camara 
+        self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (self.camaraSalvar,)) 
+        
+        #Almacena en lista datosJson los valores de la consulta a la BD
+        self.datosJson = []
+        for row in self.c1.fetchall():
+            self.datosJson.append(row)
+            
         #Almacena los valores del Json
         idCamara = self.datosJson[0][0]
         calle = self.datosJson[0][1]
@@ -931,16 +931,8 @@ class ObtenerReporteAlertaUsuario:
 
         #Conexión a BD
         self.db = sqlite3.connect('proyecto_placas.db')
-        self.c2 = self.db.cursor()       
+        self.c1 = self.db.cursor()       
 
-        #Selecciona valores de la tabla de Camara 
-        self.c2.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (config.camara,)) 
-        
-        #Almacena en lista datosJson los valores de la consulta a la BD
-        self.datosJson = []
-        for row in self.c2.fetchall():
-            self.datosJson.append(row)            
-        
         #Abre el archivo donde se almacenan los reportes de alerta y lo lee
         with open('ReporteAlerta.json', 'r') as file:
             profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
@@ -948,6 +940,7 @@ class ObtenerReporteAlertaUsuario:
             #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
             for data in profiles:
                 if data["Placa"] == self.comboPlaca.get():
+                    self.camaraSalvar = data['Camara']
                     profile1 = json.dumps(data, indent=4, sort_keys=False)#Imprime los datos en formato JSON
                     self.textReporteGenerado.insert('1.0', profile1)#Inserta el valor completo de la placa en el widget text
 
@@ -955,8 +948,16 @@ class ObtenerReporteAlertaUsuario:
         for plate in profiles:
             if plate['Placa'] == self.comboPlaca.get():
                 self.placaSalvar = plate['Placa']
-                continue
-
+        
+        
+        #Selecciona valores de la tabla de Camara 
+        self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (self.camaraSalvar,)) 
+        
+        #Almacena en lista datosJson los valores de la consulta a la BD
+        self.datosJson = []
+        for row in self.c1.fetchall():
+            self.datosJson.append(row)
+            
         #Almacena los valores del Json
         idCamara = self.datosJson[0][0]
         calle = self.datosJson[0][1]
@@ -1130,8 +1131,7 @@ class MonitoreaCamara:
                         return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
             else:
                 return messagebox.showerror("Genear Reporte","Error, Formato inválido, pruebe con alguno de los siguientes formatos: \n A00-AAA \n 000-AAA")
-                    
-        
+                         
         #Placa EdoMex, verifica valor valido para placas del EdoMex
         if self.opcion.get() == 2:
             if len(self.entryPlaca.get()) == 9:
@@ -1155,6 +1155,7 @@ class MonitoreaCamara:
             return messagebox.showwarning("Genear Reporte","Error, selecciona un color")
 
         data_dict =  {
+            "Camara" : f"{self.camara.get()}",
             "Placa"  : f"{self.entryPlaca.get().upper()}",
             "Marca"  : f"{self.comboMarca.get()}",
             "Modelo" : f"{self.comboModelo.get()}",

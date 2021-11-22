@@ -1,0 +1,11 @@
+idCamara: 2
+Calle: Marina Nacional 
+Colonia: Anahuac
+Alcaldia: Miguel Hidalgo
+{
+    "Camara": "2",
+    "Placa": "TGA-32-91",
+    "Marca": "Lincoln",
+    "Modelo": "Nautilus",
+    "Color": "Gris"
+}

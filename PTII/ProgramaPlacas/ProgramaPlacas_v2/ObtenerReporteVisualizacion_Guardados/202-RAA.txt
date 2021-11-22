@@ -1,0 +1,11 @@
+idCamara: 1
+Calle: Bolsena
+Colonia: Anahuac
+Alcaldia: Miguel Hidalgo
+{
+    "Camara": "1",
+    "Placa": "202-RAA",
+    "Marca": "Volkswagen",
+    "Modelo": "Gol",
+    "Color": "Gris"
+}

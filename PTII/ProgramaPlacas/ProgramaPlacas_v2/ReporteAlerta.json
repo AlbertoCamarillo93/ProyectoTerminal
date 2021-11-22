@@ -1,7 +1,4 @@
-[{"Placa": "AAE-66-99", "Marca": "Cadillac", "Modelo": "XT4", "Color": "Negro"},{"Placa": "ASD-99-77", "Marca": "BMW", "Modelo": "Serie 4", "Color": "Gris"}
-,{"Placa": "F99-ERT", "Marca": "Mini", "Modelo": "Mini 3 puertas", "Color": "Azul"}
-,{"Placa": "QWE-33-02", "Marca": "Honda", "Modelo": "City", "Color": "Cafe"}
-,{"Placa": "GWE-33-02", "Marca": "Honda", "Modelo": "City", "Color": "Cafe"}
-,{"Placa": "LL9-667", "Marca": "Audi", "Modelo": "A5", "Color": "Cafe"}
-,{"Placa": "A00-AAP", "Marca": "Peugeot", "Modelo": "5008", "Color": "Cafe"}
+[{"Camara": "2", "Placa": "TGA-32-91", "Marca": "Lincoln", "Modelo": "Nautilus", "Color": "Gris"}
+,{"Camara": "1", "Placa": "202-RAA", "Marca": "Volkswagen", "Modelo": "Gol", "Color": "Gris"}
+,{"Camara": "2", "Placa": "LTY-23-36", "Marca": "Honda", "Modelo": "City", "Color": "Azul"}
 ]
