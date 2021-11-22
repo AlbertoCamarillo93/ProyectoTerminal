@@ -1,0 +1,9 @@
+1 {Calle:Bolsena
+} {Colonia:Anahuac
+} {Delegación:Miguel Hidalgo
+}{
+    "Placa": "F99-ERT",
+    "Marca": "Mini",
+    "Modelo": "Mini 3 puertas",
+    "Color": "Azul"
+}

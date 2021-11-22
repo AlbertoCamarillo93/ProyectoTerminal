@@ -1,8 +1,10 @@
-from tkinter import Entry, Frame, StringVar, Text, Toplevel, messagebox, Label, Button, Tk, ttk
+import sqlite3
+from tkinter import Text, messagebox, Label, Button, Tk, ttk
 import json
 import tkinter as tk
+import config
 import os
-     
+
 class ObtenerReporteAlerta:
     
     ################ ADMINISTRADOR – REPORTE DE PLACAS – OBTENER REPORTE ###############
@@ -15,7 +17,7 @@ class ObtenerReporteAlerta:
             self.listaPlacas.sort()
             
 
-        self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
+        self.windowSubmenuRPObtenerReporteAlerta = Tk()
         self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
@@ -52,6 +54,18 @@ class ObtenerReporteAlerta:
             return messagebox.showwarning("Obtener Reporte","Error, selecciona una placa")
         #else:
         #    print(self.comboPlaca.get())
+
+        self.db = sqlite3.connect('proyecto_placas_pruebas.db')
+        self.c1 = self.db.cursor()       
+
+        #Selecciona valores de la tabla de Camara 
+        self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (config.camara)) 
+        
+        self.result = []
+        for row in self.c1.fetchall():
+            self.result.append(row) 
+        print(self.result)
+        
         
         with open('ReporteAlerta.json', 'r') as file:
             profiles = json.load(file)
@@ -59,7 +73,21 @@ class ObtenerReporteAlerta:
             for profile in profiles:
                 if profile["Placa"] == self.comboPlaca.get():
                     profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime bonito el JSON
+                    #profile1.truncate()
+                    #profile1.write(self.result)
+                    #json.dump(profile1, self.result)
                     self.textReporteGenerado.insert('1.0', profile1)#inserta valor en el widget text
+        
+        idCamara = self.result[0][0]
+
+        idCamara_var = "Id Camara: ", idCamara
+        calle_var = f"Calle:{self.result[0][1]}\n"
+        colonia_var = f"Colonia:{self.result[0][2]}\n"
+        delegacion_var = f"Alcaldia:{self.result[0][3]}\n"
+
+        datosCamara = idCamara, calle_var, colonia_var, delegacion_var
+        self.textReporteGenerado.insert('1.0', datosCamara)#inserta valor en el widget text
+
             
         self.datosGuardarTxt = self.textReporteGenerado.get('1.0', tk.END+"-1c")
         #self.comboPlaca.set("Placa")
@@ -83,5 +111,11 @@ class ObtenerReporteAlerta:
 args = ""   
 ObtenerReporteAlerta(args)
 
+
+config.apellido = ObtenerReporteAlerta.obtieneVariablesGlobales(args)
+config.camara = ObtenerReporteAlerta.obtieneVariablesGlobales(args)
+config.contacto_usuario = ObtenerReporteAlerta.obtieneVariablesGlobales(args)
+config.id_usuario = ObtenerReporteAlerta.obtieneVariablesGlobales(args)
+config.nombre = ObtenerReporteAlerta.obtieneVariablesGlobales(args)
 
 
