@@ -1,5 +1,5 @@
 import sqlite3
-from tkinter import Text, messagebox, Label, Button, Tk, ttk
+from tkinter import Text, Toplevel, messagebox, Label, Button, Tk, ttk
 import json
 import tkinter as tk
 import config
@@ -17,8 +17,15 @@ class ObtenerReporteAlerta:
             self.listaPlacas.sort()
             
 
-        self.windowSubmenuRPObtenerReporteAlerta = Tk()
-        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
+        self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
+
+        ancho_ventana = 350
+        alto_ventana = 400
+        x_ventana = self.windowSubmenuRPObtenerReporteAlerta.winfo_screenwidth() // 2 - ancho_ventana // 2
+        y_ventana = self.windowSubmenuRPObtenerReporteAlerta.winfo_screenheight() // 2 - alto_ventana // 2
+        posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+        self.windowSubmenuRPObtenerReporteAlerta.geometry(posicion)
+
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
 
@@ -36,13 +43,13 @@ class ObtenerReporteAlerta:
 
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "El reporte generado es:" ).place(x=5, y=110)
         self.textReporteGenerado = Text(self.windowSubmenuRPObtenerReporteAlerta, state = "normal")
-        self.textReporteGenerado.place(x=5, y=140,  width=330, height=100)
+        self.textReporteGenerado.place(x=5, y=140,  width=330, height=180)
 
         #COLUMNA DE BOTONES
         self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.obtieneReporteAlerta)
-        self.buttonGuardar.place(x=50, y=250, width=100, height=30) #AQUI PORNER UN MENSAJE DE SE GUARDO CORRECTAMENTE,
+        self.buttonGuardar.place(x=50, y=340, width=100, height=30) #AQUI PORNER UN MENSAJE DE SE GUARDO CORRECTAMENTE,
         self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar")#, command = lambda : ReportePlacas(self.windowSubmenuRPObtenerReporteAlerta.withdraw())
-        self.buttonRegresar.place(x=200, y=250, width=100, height=30)
+        self.buttonRegresar.place(x=200, y=340, width=100, height=30)
 
         self.windowSubmenuRPObtenerReporteAlerta.mainloop()
 
@@ -73,30 +80,31 @@ class ObtenerReporteAlerta:
             for profile in profiles:
                 if profile["Placa"] == self.comboPlaca.get():
                     profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime bonito el JSON
-                    #profile1.truncate()
-                    #profile1.write(self.result)
-                    #json.dump(profile1, self.result)
                     self.textReporteGenerado.insert('1.0', profile1)#inserta valor en el widget text
-        
+            
+            for client in profiles:
+                if client['Placa'] == self.comboPlaca.get():
+                    self.placaSalvar = client['Placa']
+                    print('PlacaSalvar:', client['Placa'])
+
+                #print('Placa:', client['Placa'])
+
         idCamara = self.result[0][0]
+        calle = self.result[0][1]
+        colonia = self.result[0][2]
+        alcaldia = self.result[0][3]
 
-        idCamara_var = "Id Camara: ", idCamara
-        calle_var = f"Calle:{self.result[0][1]}\n"
-        colonia_var = f"Colonia:{self.result[0][2]}\n"
-        delegacion_var = f"Alcaldia:{self.result[0][3]}\n"
-
-        datosCamara = idCamara, calle_var, colonia_var, delegacion_var
-        self.textReporteGenerado.insert('1.0', datosCamara)#inserta valor en el widget text
+        self.textReporteGenerado.insert('1.0', f"idCamara: {idCamara}\nCalle: {calle}\nColonia: {colonia}\nAlcaldia: {alcaldia}\n")#inserta valor en el widget text
 
             
         self.datosGuardarTxt = self.textReporteGenerado.get('1.0', tk.END+"-1c")
-        #self.comboPlaca.set("Placa")
+        #self.comboPlaca.get()
 
     def obtieneReporteAlerta(self):
         if self.textReporteGenerado.get('1.0', tk.END+"-1c") == "": #-1c significa que la posición está un carácter por delante de "end"
             return messagebox.showwarning("Guardar Reporte","No hay nada que guardar")
 
-        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.comboPlaca.get()}.txt", "w")
+        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.placaSalvar}.txt", "w")
         file.write(f"{self.datosGuardarTxt}")
         #file.close()
         self.textReporteGenerado.delete('1.0', tk.END)

@@ -1,3 +1,7 @@
+idCamara: 1
+Calle: Bolsena
+Colonia: Anahuac
+Alcaldia: Miguel Hidalgo
 {
     "Placa": "QWE-33-02",
     "Marca": "Honda",

@@ -1,7 +1,8 @@
-1 {Calle:Bolsena
-} {Colonia:Anahuac
-} {Delegación:Miguel Hidalgo
-}{
+idCamara: 1
+Calle: Bolsena
+Colonia: Anahuac
+Alcaldia: Miguel Hidalgo
+{
     "Placa": "F99-ERT",
     "Marca": "Mini",
     "Modelo": "Mini 3 puertas",

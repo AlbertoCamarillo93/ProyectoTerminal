@@ -88,7 +88,7 @@ class Login:
             config.contacto_usuario = usuario[5]
             
         self.db.commit()
-                
+        #print(config.camara, type(config.camara))      
         return config.id_usuario, config.camara, config.nombre, config.apellido, config.contacto_usuario
 
 ######################################################################################################################################################        
@@ -760,7 +760,14 @@ class ObtenerReporteAlerta:
             
         #Datos primarios de la ventana
         self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
-        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
+        #Centra ventana en la pantalla
+        ancho_ventana = 350
+        alto_ventana = 400
+        x_ventana = self.windowSubmenuRPObtenerReporteAlerta.winfo_screenwidth() // 2 - ancho_ventana // 2
+        y_ventana = self.windowSubmenuRPObtenerReporteAlerta.winfo_screenheight() // 2 - alto_ventana // 2
+        posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+        self.windowSubmenuRPObtenerReporteAlerta.geometry(posicion)
+
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
         labeltitulo = Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" )
         labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
@@ -782,13 +789,13 @@ class ObtenerReporteAlerta:
         #Texto del reporte
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "El reporte generado es:" ).place(x=5, y=110)
         self.textReporteGenerado = Text(self.windowSubmenuRPObtenerReporteAlerta, state = "normal")
-        self.textReporteGenerado.place(x=5, y=140,  width=330, height=100)
+        self.textReporteGenerado.place(x=5, y=140,  width=330, height=180)
 
         #COLUMNA DE BOTONES
         self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.guardaReporteAlerta)
-        self.buttonGuardar.place(x=50, y=250, width=100, height=30)
+        self.buttonGuardar.place(x=50, y=340, width=100, height=30)
         self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar", command = lambda : ReportePlacas(self.windowSubmenuRPObtenerReporteAlerta.withdraw()))
-        self.buttonRegresar.place(x=200, y=250, width=100, height=30)
+        self.buttonRegresar.place(x=200, y=340, width=100, height=30)
 
     def buscaReporteAlerta(self):
         #Limpia el widget Text cada que se va a ingresar nueva información
@@ -797,17 +804,45 @@ class ObtenerReporteAlerta:
         #Condional que verifica que se haya seleccionado una opción
         if self.comboPlaca.get() == "Placa":
             return messagebox.showwarning("Obtener Reporte","Error, selecciona una placa")
+
+        #Conexión a BD
+        self.db = sqlite3.connect('proyecto_placas.db')
+        self.c1 = self.db.cursor()       
+
+        #Selecciona valores de la tabla de Camara 
+        self.c1.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (config.camara,)) 
+        
+        #Almacena en lista datosJson los valores de la consulta a la BD
+        self.datosJson = []
+        for row in self.c1.fetchall():
+            self.datosJson.append(row)
+            
         
         #Abre el archivo donde se almacenan los reportes de alerta y lo lee
         with open('ReporteAlerta.json', 'r') as file:
             profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
             
             #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
-            for profile in profiles:
-                if profile["Placa"] == self.comboPlaca.get():
-                    profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime los datos en formato JSON
+            for data in profiles:
+                if data["Placa"] == self.comboPlaca.get():
+                    profile1 = json.dumps(data, indent=4, sort_keys=False)#Imprime los datos en formato JSON
                     self.textReporteGenerado.insert('1.0', profile1)#Inserta el valor completo de la placa en el widget text
-        
+
+            #Busca que el nombre de la placa en el Json coincida con el valor elegido, lo almacena en una variable para su posterior uso
+        for plate in profiles:
+            if plate['Placa'] == self.comboPlaca.get():
+                self.placaSalvar = plate['Placa']
+                continue
+
+        #Almacena los valores del Json
+        idCamara = self.datosJson[0][0]
+        calle = self.datosJson[0][1]
+        colonia = self.datosJson[0][2]
+        alcaldia = self.datosJson[0][3]
+
+        #Agrega los datos de la camara en la BD en el widget de Text 
+        self.textReporteGenerado.insert('1.0', f"idCamara: {idCamara}\nCalle: {calle}\nColonia: {colonia}\nAlcaldia: {alcaldia}\n")#inserta valor en el widget text
+
         #Almacena el valor obtenido en el widget
         self.datosGuardarTxt = self.textReporteGenerado.get('1.0', tk.END+"-1c")
 
@@ -817,7 +852,7 @@ class ObtenerReporteAlerta:
             return messagebox.showwarning("Guardar Reporte","No hay nada que guardar")
 
         #Crea un archivo de escritura con el nombre de la placa seleccionada en el combobox
-        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.comboPlaca.get()}.txt", "w")
+        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.placaSalvar}.txt", "w")
         #Escribe los datos obtenidos en el widget Text
         file.write(f"{self.datosGuardarTxt}")
         #Limpia el widget Text
