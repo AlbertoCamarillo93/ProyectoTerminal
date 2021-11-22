@@ -53,7 +53,16 @@ class MonitoreaCamara:
         self.listaNumeros = ['0','1','2','3','4','5','6','7','8','9']
 
         self.windowSubmenuMonitoreaCamara = Tk()
-        self.windowSubmenuMonitoreaCamara.geometry("850x500+500+250")
+        #Centra la ventana a la mitad de la pantalla
+        ancho_ventana = 850
+        alto_ventana = 500
+        x_ventana = self.windowSubmenuMonitoreaCamara.winfo_screenwidth() // 2 - ancho_ventana // 2
+        y_ventana = self.windowSubmenuMonitoreaCamara.winfo_screenheight() // 2 - alto_ventana // 2
+        posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+        self.windowSubmenuMonitoreaCamara.geometry(posicion)
+
+
+        #self.windowSubmenuMonitoreaCamara.geometry("850x550+500+250")
         self.windowSubmenuMonitoreaCamara.title("Menu Usuario/Monitorear Cámara")
         Label(self.windowSubmenuMonitoreaCamara, text = "Monitorear Cámara" ).pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
         
