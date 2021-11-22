@@ -869,18 +869,29 @@ class ObtenerReporteAlerta:
 
 class ObtenerReporteAlertaUsuario:
     
-    ################ ADMINISTRADOR – REPORTE DE PLACAS – OBTENER REPORTE ###############
     def __init__(self, args):
+
+        #Crea lista y abre y lee el archivo donde se almacenan los reportes de alerta
         self.listaPlacas = []
         with open('ReporteAlerta.json', 'r') as file:
+            #Convierte los datos Json en datos equivalentes a Python
             placasJson = json.load(file)
+            #Ciclo que agrega a la lista cada valor del archivo json
             for self.placaJson in placasJson:
                 self.listaPlacas.append(self.placaJson["Placa"])
+            #Ordena los datos de la lista
             self.listaPlacas.sort()
             
-
+        #Datos primarios de la ventana
         self.windowSubmenuRPObtenerReporteAlerta = Toplevel()
-        self.windowSubmenuRPObtenerReporteAlerta.geometry("350x300+500+250")
+        #Centra ventana en la pantalla
+        ancho_ventana = 350
+        alto_ventana = 400
+        x_ventana = self.windowSubmenuRPObtenerReporteAlerta.winfo_screenwidth() // 2 - ancho_ventana // 2
+        y_ventana = self.windowSubmenuRPObtenerReporteAlerta.winfo_screenheight() // 2 - alto_ventana // 2
+        posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+        self.windowSubmenuRPObtenerReporteAlerta.geometry(posicion)
+
         self.windowSubmenuRPObtenerReporteAlerta.title("Reporte de Placas/Obtener Reporte")
         labeltitulo = Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Obtener Reporte Alerta" )
         labeltitulo.pack(padx= 5, pady = 5, ipadx = 5, ipady = 5)
@@ -888,53 +899,93 @@ class ObtenerReporteAlertaUsuario:
         #COLUMNA DE LABES, BOXES
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Ingresa la placa para obtener el reporte:" ).place(x=5, y=45)
        
+        #Placa
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "Placa:" ).place(x=5, y=75)
         self.comboPlaca = ttk.Combobox(self.windowSubmenuRPObtenerReporteAlerta,  state = "readonly")
         self.comboPlaca ["values"] = self.listaPlacas
         self.comboPlaca.set("Placa")
         self.comboPlaca.place(x=50, y=75, width=130, height=30)
 
+        #Aceptar
         self.buttonAceptar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Aceptar", command = self.buscaReporteAlerta)
         self.buttonAceptar.place(x=200, y=75, width=80, height=30)
-
+        
+        #Texto del reporte
         Label(self.windowSubmenuRPObtenerReporteAlerta, text = "El reporte generado es:" ).place(x=5, y=110)
         self.textReporteGenerado = Text(self.windowSubmenuRPObtenerReporteAlerta, state = "normal")
-        self.textReporteGenerado.place(x=5, y=140,  width=330, height=100)
+        self.textReporteGenerado.place(x=5, y=140,  width=330, height=180)
 
         #COLUMNA DE BOTONES
-        self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.obtieneReporteAlerta)
-        self.buttonGuardar.place(x=50, y=250, width=100, height=30)
+        self.buttonGuardar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Guardar", command = self.guardaReporteAlerta)
+        self.buttonGuardar.place(x=50, y=340, width=100, height=30)
         self.buttonRegresar = Button(self.windowSubmenuRPObtenerReporteAlerta, text = "Regresar", command = lambda : User(self.windowSubmenuRPObtenerReporteAlerta.withdraw()))
-        self.buttonRegresar.place(x=200, y=250, width=100, height=30)
+        self.buttonRegresar.place(x=200, y=340, width=100, height=30)
 
     def buscaReporteAlerta(self):
+        #Limpia el widget Text cada que se va a ingresar nueva información
         self.textReporteGenerado.delete('1.0', tk.END)
         
+        #Condional que verifica que se haya seleccionado una opción
         if self.comboPlaca.get() == "Placa":
             return messagebox.showwarning("Obtener Reporte","Error, selecciona una placa")
-        #else:
-        #    print(self.comboPlaca.get())
-        
-        with open('ReporteAlerta.json', 'r') as file:
-            profiles = json.load(file)
-            
-            for profile in profiles:
-                if profile["Placa"] == self.comboPlaca.get():
-                    profile1 = json.dumps(profile, indent=4, sort_keys=False)#Imprime bonito el JSON
-                    self.textReporteGenerado.insert('1.0', profile1)#inserta valor en el widget text
-            
-        self.datosGuardarTxt = self.textReporteGenerado.get('1.0', tk.END+"-1c")
-        #self.comboPlaca.set("Placa")
 
-    def obtieneReporteAlerta(self):
+        #Conexión a BD
+        self.db = sqlite3.connect('proyecto_placas.db')
+        self.c2 = self.db.cursor()       
+
+        #Selecciona valores de la tabla de Camara 
+        self.c2.execute("SELECT idCamara, calle, colonia, delegacion FROM Camara WHERE idCamara = ?", (config.camara,)) 
+        
+        #Almacena en lista datosJson los valores de la consulta a la BD
+        self.datosJson = []
+        for row in self.c2.fetchall():
+            self.datosJson.append(row)            
+        
+        #Abre el archivo donde se almacenan los reportes de alerta y lo lee
+        with open('ReporteAlerta.json', 'r') as file:
+            profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
+            
+            #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
+            for data in profiles:
+                if data["Placa"] == self.comboPlaca.get():
+                    profile1 = json.dumps(data, indent=4, sort_keys=False)#Imprime los datos en formato JSON
+                    self.textReporteGenerado.insert('1.0', profile1)#Inserta el valor completo de la placa en el widget text
+
+            #Busca que el nombre de la placa en el Json coincida con el valor elegido, lo almacena en una variable para su posterior uso
+        for plate in profiles:
+            if plate['Placa'] == self.comboPlaca.get():
+                self.placaSalvar = plate['Placa']
+                continue
+
+        #Almacena los valores del Json
+        idCamara = self.datosJson[0][0]
+        calle = self.datosJson[0][1]
+        colonia = self.datosJson[0][2]
+        alcaldia = self.datosJson[0][3]
+
+        #Agrega los datos de la camara en la BD en el widget de Text 
+        self.textReporteGenerado.insert('1.0', f"idCamara: {idCamara}\nCalle: {calle}\nColonia: {colonia}\nAlcaldia: {alcaldia}\n")#inserta valor en el widget text
+
+        #Almacena el valor obtenido en el widget
+        self.datosGuardarTxt = self.textReporteGenerado.get('1.0', tk.END+"-1c")
+
+    def guardaReporteAlerta(self):
+        #Condicional que verifica si hay información dentro del widget Text
         if self.textReporteGenerado.get('1.0', tk.END+"-1c") == "": #-1c significa que la posición está un carácter por delante de "end"
             return messagebox.showwarning("Guardar Reporte","No hay nada que guardar")
 
-        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.comboPlaca.get()}.txt", "w")
+        #Crea un archivo de escritura con el nombre de la placa seleccionada en el combobox
+        file = open(f"./ObtenerReporteVisualizacion_Guardados/{self.placaSalvar}.txt", "w")
+        #Escribe los datos obtenidos en el widget Text
         file.write(f"{self.datosGuardarTxt}")
-        #file.close()
+        #Limpia el widget Text
         self.textReporteGenerado.delete('1.0', tk.END)
+
+        #Limpia los valores del combobox de la placa
+        self.comboPlaca ["values"]= self.listaPlacas
+        self.comboPlaca.set("Placa")
         return messagebox.showinfo("Guardar Reporte","Registro guardado con éxito")
+
 
 ######################################################################################################################################################        
 ######################################################################################################################################################
