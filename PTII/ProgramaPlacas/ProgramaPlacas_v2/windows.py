@@ -45,7 +45,7 @@ class Login:
     #FUNCIÓN BOTÓN DE LOGEO
     def login(self):
         # Connect to database
-        self.db = sqlite3.connect('proyecto_placas.db')
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c = self.db.cursor()
         
         #Query que selecciona al usuario y correo ingresado de la BD
@@ -194,7 +194,7 @@ class GestionarUsuarioElimina():
 
     def __init__(self, args):
         #Conecta a la BD
-        self.db = sqlite3.connect('proyecto_placas.db')  
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c = self.db.cursor()
         self.c1 = self.db.cursor()
 
@@ -256,12 +256,12 @@ class GestionarUsuarioCrear:
     ################ ADMINISTRADOR - GESTIÓN DE USUARIOS – CREAR CUENTA ###############
     def __init__(self, args):
         #Conexión bd
-        self.db = sqlite3.connect('proyecto_placas.db')
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c1 = self.db.cursor()
         self.c2 = self.db.cursor()     
 
         #Selecciona el id_camara de la tabla de Usuario para llamarlo en self.comboAsignarCamara
-        self.c1.execute("SELECT DISTINCT id_camara FROM Usuario ORDER BY id_camara ASC")   
+        self.c1.execute("SELECT DISTINCT idCamara FROM Camara ORDER BY idCamara ASC")#("SELECT DISTINCT id_camara FROM Usuario ORDER BY id_camara ASC")   
 
         #Lista para guardar los valores recorridos en el ciclo for
         self.resultCamara = []
@@ -380,7 +380,7 @@ class GestionarUsuarioModificar:
     def __init__(self, args):
 
         #Conexiones a BD
-        self.db = sqlite3.connect('proyecto_placas.db')  
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c = self.db.cursor()
         self.c1 = self.db.cursor()
         self.c2 = self.db.cursor() 
@@ -393,7 +393,7 @@ class GestionarUsuarioModificar:
             self.result.append(row[0])            
 
         #Selecciona el id_camara de la tabla de Usuario para llamarlo en self.comboAsignarCamara
-        self.c1.execute("SELECT DISTINCT id_camara FROM Usuario ORDER BY id_camara ASC")   
+        self.c1.execute("SELECT DISTINCT idCamara FROM Camara ORDER BY idCamara ASC")   
 
         #Lista para guardar los valores recorridos en el ciclo for
         self.resultCamara = []
@@ -550,7 +550,7 @@ class GenerarReporteBusqueda:
 
     ################ ADMINISTRADOR – REPORTE DE PLACAS – GENERAR REPORTE ###############
     def __init__(self, args):
-        self.db = sqlite3.connect('proyecto_placas.db')  
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c1 = self.db.cursor()
         self.c2 = self.db.cursor()
 
@@ -680,7 +680,7 @@ class GenerarReporteBusqueda:
             }
 
         #Bloque que lee, abre, y escribe en el archivo json los datos del diccionario
-        fname = "PlacasReporteBusqueda.json"
+        fname = "D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/PlacasReporteBusqueda.json"
         if os.path.isfile(fname):
             # File exists
             with open(fname, 'a+') as outfile:
@@ -749,7 +749,7 @@ class ObtenerReporteAlerta:
 
         #Crea lista y abre y lee el archivo donde se almacenan los reportes de alerta
         self.listaPlacas = []
-        with open('ReporteAlerta.json', 'r') as file:
+        with open('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/ReporteAlerta.json', 'r') as file:
             #Convierte los datos Json en datos equivalentes a Python
             placasJson = json.load(file)
             #Ciclo que agrega a la lista cada valor del archivo json
@@ -806,11 +806,11 @@ class ObtenerReporteAlerta:
             return messagebox.showwarning("Obtener Reporte","Error, selecciona una placa")
 
         #Conexión a BD
-        self.db = sqlite3.connect('proyecto_placas.db')
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c1 = self.db.cursor()       
 
         #Abre el archivo donde se almacenan los reportes de alerta y lo lee
-        with open('ReporteAlerta.json', 'r') as file:
+        with open('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/ReporteAlerta.json', 'r') as file:
             profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
             
             #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
@@ -873,7 +873,7 @@ class ObtenerReporteAlertaUsuario:
 
         #Crea lista y abre y lee el archivo donde se almacenan los reportes de alerta
         self.listaPlacas = []
-        with open('ReporteAlerta.json', 'r') as file:
+        with open('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/ReporteAlerta.json', 'r') as file:
             #Convierte los datos Json en datos equivalentes a Python
             placasJson = json.load(file)
             #Ciclo que agrega a la lista cada valor del archivo json
@@ -930,11 +930,11 @@ class ObtenerReporteAlertaUsuario:
             return messagebox.showwarning("Obtener Reporte","Error, selecciona una placa")
 
         #Conexión a BD
-        self.db = sqlite3.connect('proyecto_placas.db')
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c1 = self.db.cursor()       
 
         #Abre el archivo donde se almacenan los reportes de alerta y lo lee
-        with open('ReporteAlerta.json', 'r') as file:
+        with open('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/ReporteAlerta.json', 'r') as file:
             profiles = json.load(file) #Convierte los datos Json en datos equivalentes a Python
             
             #Ciclo que recorre los valores del json en busca de coincidencia con el valor elegido en el combobox
@@ -997,7 +997,7 @@ class MonitoreaCamara:
     def __init__(self, args):
 
         #Conecta a la BD
-        self.db = sqlite3.connect('proyecto_placas.db')
+        self.db = sqlite3.connect('D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/proyecto_placas.db')
         self.c1 = self.db.cursor()
         self.c2 = self.db.cursor()
 
@@ -1028,7 +1028,7 @@ class MonitoreaCamara:
         #Configuración básica de la ventana
         self.windowSubmenuMonitoreaCamara = Toplevel()
         #Centra la ventana a la mitad de la pantalla
-        ancho_ventana = 850
+        ancho_ventana = 450
         alto_ventana = 500
         x_ventana = self.windowSubmenuMonitoreaCamara.winfo_screenwidth() // 2 - ancho_ventana // 2
         y_ventana = self.windowSubmenuMonitoreaCamara.winfo_screenheight() // 2 - alto_ventana // 2
@@ -1049,54 +1049,54 @@ class MonitoreaCamara:
         self.btnVisualizar.place(x=260, y=40, width=100, height=25)
 
         #COLUMNA DE VALORES
-        Label(self.windowSubmenuMonitoreaCamara, text = "Datos de la placa detectada" ).place(x=5, y=70)
+        Label(self.windowSubmenuMonitoreaCamara, text = "Datos de la placa detectada" ).place(x=150, y=70)
         
         #RADIOBUTTON
         self.opcion = IntVar()
         self.buttonCDMX = Radiobutton(self.windowSubmenuMonitoreaCamara, text="Ciudad de México", variable= self.opcion, value=1, command= self.selectRadioButton)
-        self.buttonCDMX.place(x=5, y=90)
+        self.buttonCDMX.place(x=150, y=90)
         self.buttonEdoMex = Radiobutton(self.windowSubmenuMonitoreaCamara, text="Estado de México", variable= self.opcion, value=2, command= self.selectRadioButton)
-        self.buttonEdoMex.place(x=5, y=110)
+        self.buttonEdoMex.place(x=150, y=110)
 
         #Placa
-        Label(self.windowSubmenuMonitoreaCamara, text = "Placa" ).place(x=5, y=130)
+        Label(self.windowSubmenuMonitoreaCamara, text = "Placa" ).place(x=150, y=130)
         self.entryPlaca_var = StringVar()
         self.entryPlaca = Entry(self.windowSubmenuMonitoreaCamara, textvariable = self.entryPlaca_var)
-        self.entryPlaca.place(x=5, y=150, width=160, height=25)
+        self.entryPlaca.place(x=150, y=150, width=160, height=25)
 
         #Marca
-        Label(self.windowSubmenuMonitoreaCamara, text = "Marca" ).place(x=5, y=180)
+        Label(self.windowSubmenuMonitoreaCamara, text = "Marca" ).place(x=150, y=180)
         self.comboMarca = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values = self.resultMarca)
         self.comboMarca.set("Marca")
-        self.comboMarca.place(x=5, y=200, width=160, height=25)
+        self.comboMarca.place(x=150, y=200, width=160, height=25)
         self.buttonBuscarModelo = Button(self.windowSubmenuMonitoreaCamara, text = "Buscar Modelo", command = self.obtenerModelo)
-        self.buttonBuscarModelo.place(x=10, y=230, width=160, height=30)
+        self.buttonBuscarModelo.place(x=150, y=230, width=160, height=30)
 
         #Modelo
-        Label(self.windowSubmenuMonitoreaCamara, text = "Modelo" ).place(x=5, y=270)
+        Label(self.windowSubmenuMonitoreaCamara, text = "Modelo" ).place(x=150, y=270)
         self.comboModelo = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values =  self.listaModelo) 
         self.comboModelo.set("Modelo")
-        self.comboModelo.place(x=5, y=290, width=160, height=25)
+        self.comboModelo.place(x=150, y=290, width=160, height=25)
 
         #Color
-        Label(self.windowSubmenuMonitoreaCamara, text = "Color" ).place(x=5, y=320)
+        Label(self.windowSubmenuMonitoreaCamara, text = "Color" ).place(x=150, y=320)
         self.comboColor = ttk.Combobox(self.windowSubmenuMonitoreaCamara,  state = "readonly", values =  self.listaColores) 
         self.comboColor.set("Color")
-        self.comboColor.place(x=5, y=340, width=160, height=25)
+        self.comboColor.place(x=150, y=340, width=160, height=25)
 
         #Video
         self.lblVideo = Label(self.windowSubmenuMonitoreaCamara, text = "" )
-        self.lblVideo.place(x=185, y=105)
+        self.lblVideo.place(x=0, y=0)
 
         #COLUMNA DE BOTONES
         self.buttonGenerar = Button(self.windowSubmenuMonitoreaCamara, text = "Generar Reporte de Alerta", command = self.generarReporteAlerta)
-        self.buttonGenerar.place(x=10, y=380, width=160, height=30 )
+        self.buttonGenerar.place(x=150, y=380, width=160, height=30 )
         #self.buttonVisualizar = Button(self.windowSubmenuMonitoreaCamara, text = "Visualizar Alerta", command = lambda : VisualizarReporteAlerta.visualizarAlerta(self, self.windowSubmenuMonitoreaCamara.withdraw()))
         #self.buttonVisualizar.place(x=10, y=260, width=120, height=30)
         self.buttonLimpiar = Button(self.windowSubmenuMonitoreaCamara, text = "Limpiar", command = self.LimpiarWidgets)#, command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
-        self.buttonLimpiar.place(x=10, y=420, width=160, height=30)
+        self.buttonLimpiar.place(x=150, y=420, width=160, height=30)
         self.buttonRegresar = Button(self.windowSubmenuMonitoreaCamara, text = "Regresar", command = lambda : User(self.windowSubmenuMonitoreaCamara.withdraw()))
-        self.buttonRegresar.place(x=10, y=460, width=160, height=30)
+        self.buttonRegresar.place(x=150, y=460, width=160, height=30)
 
     def LimpiarWidgets(self):
         self.opcion.set(0)
@@ -1162,7 +1162,7 @@ class MonitoreaCamara:
             "Color"  : f"{self.comboColor.get()}"
             }
 
-        fname = "ReporteAlerta.json"
+        fname = 'D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/ProyectoTerminal/ProgramaPlacas_v2/ReporteAlerta.json'
         if os.path.isfile(fname):
             # File exists
             with open(fname, 'a+') as outfile:
@@ -1224,11 +1224,19 @@ class MonitoreaCamara:
         #Selecciona el video según la cámara elegida en el combobox
         self.video_path = ''
         if  self.camara.get() == "1":
-            self.video_path = "autos1.mp4"
+            self.video_path = os.system("D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/batch_00010.bat") #"autos1.mp4"
             self.cap = cv2.VideoCapture(self.video_path)
             self.visualizar()
         elif self.camara.get() == "2":
-            self.video_path = "autos2.mp4"
+            self.video_path = os.system("D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/batch_00017.bat")
+            self.cap = cv2.VideoCapture(self.video_path)
+            self.visualizar()
+        elif self.camara.get() == "3":
+            self.video_path = os.system("D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/batch_00027.bat")
+            self.cap = cv2.VideoCapture(self.video_path)
+            self.visualizar()
+        elif self.camara.get() == "4":
+            self.video_path = os.system("D:/Aplicaciones/Yolo_v4/yolov4-custom-functions/batch_00031.bat")
             self.cap = cv2.VideoCapture(self.video_path)
             self.visualizar()
         else:
@@ -1247,12 +1255,12 @@ class MonitoreaCamara:
                 self.im = Img.fromarray(self.frame)#Crea una memoria de imagen a partir de un objeto que exporta la interfaz de matriz
                 self.img = ImageTk.PhotoImage(image=self.im)#Se usa  donde Tkinter espere un objeto de imagen.
 
-                self.lblVideo.configure(image=self.img)
-                self.lblVideo.image = self.img
-                self.lblVideo.after(10, self.visualizar)
+                #self.lblVideo.configure(image=self.img)
+                #self.lblVideo.image = self.img
+                #self.lblVideo.after(10, self.visualizar)
             else:
                 print("No se selecciono nada")
-                self.lblVideo.image = ""
+                #self.lblVideo.image = ""
                 self.cap.release()
 
     def selectRadioButton(self):
