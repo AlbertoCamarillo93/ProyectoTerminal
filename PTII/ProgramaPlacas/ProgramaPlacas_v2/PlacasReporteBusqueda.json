@@ -45,6 +45,15 @@
         }
    ,{"Placa": "A33-ASD", "Marca": "Chevrolet", "Modelo": "Aveo", "Color": "Gris"}
 ,{"Placa": "ASD-99-77", "Marca": "CUPRA", "Modelo": "Formentor", "Color": "Azul"}
-,{"Placa": "GHI-999", "Marca": "Mercedes Benz", "Modelo": "GLA", "Color": "Morado"},{"Placa": "D34-GXZ", "Marca": "Nissan", "Modelo": "Sentra", "Color": "Cafe"}
+,{"Placa": "GHI-999", "Marca": "Mercedes Benz", "Modelo": "GLA", "Color": "Morado"}
+,{"Placa": "D34-GXZ", "Marca": "Nissan", "Modelo": "Sentra", "Color": "Cafe"}
+,{"Placa": "NRW-63-89", "Marca": "Honda", "Modelo": "Odyssey", "Color": "Blanco"}
+,{"Placa": "NDJ-96-42", "Marca": "BAIC", "Modelo": "X30", "Color": "Naranja"}
+,{"Placa": "U03-ASW", "Marca": "Toyota", "Modelo": "Prius", "Color": "Blanco"}
+,{"Placa": "T59-AYA", "Marca": "Mitsubishi", "Modelo": "Montero", "Color": "Rojo"}
+,{"Placa": "N85-ARH", "Marca": "Mazda", "Modelo": "MX-5", "Color": "Cafe"}
+,{"Placa": "NYW-45-40", "Marca": "Ford", "Modelo": "Edge", "Color": "Azul"}
+,{"Placa": "Y09-AFL", "Marca": "Hyundai", "Modelo": "Accent", "Color": "Blanco"}
+,{"Placa": "NUC-19-72", "Marca": "Jeep", "Modelo": "Compass", "Color": "Blanco"},{"Placa": "NZZ-57-14", "Marca": "Subaru", "Modelo": "WRX STI", "Color": "Negro"},{"Placa": "NZC-52-83", "Marca": "Suzuki", "Modelo": "Ignis", "Color": "Rojo"}
 ]
 }
